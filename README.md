@@ -16,6 +16,8 @@ Skaldi is a simple C++ library for creating and managing UDP and TCP server. It 
 
 ## Help
 
+If you have any questions, feel free open an issue on the [GitHub repository](https://github.com/Fazanwolf/Skaldi/issues)
+
 ## Authors
 
 Contributors:
