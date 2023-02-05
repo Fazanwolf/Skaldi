@@ -67,9 +67,11 @@ int ParserArgs::handleServer()
     utilities::Transform::toLower(type);
 
     if (utilities::Check::strIsEqual("tcp", type)) {
-        std::cout << "SERVER TCP: Todo" << std::endl;
+        this->_g->createTCPServer(std::stoi(_av[3]));
+        return (0);
     } else if (utilities::Check::strIsEqual("udp", type)) {
-        std::cout << "SERVER UDP: Todo" << std::endl;
+        this->_g->createUDPServer(std::stoi(_av[3]));
+        return (0);
     }
     return this->invalidArgs();
 }
@@ -79,7 +81,7 @@ int ParserArgs::handleServer()
  * Handle the client side arguments
  * @return int
  */
-void ParserArgs::handleClient()
+int ParserArgs::handleClient()
 {
     if (!utilities::Check::isIp(_av[3]) || !utilities::Check::isPort(_av[4]))
         return this->invalidArgs();
@@ -88,9 +90,13 @@ void ParserArgs::handleClient()
     utilities::Transform::toLower(type);
 
     if (utilities::Check::strIsEqual("tcp", type)) {
-        std::cout << "CLIENT TCP: Todo" << std::endl;
+        this->_g->createTCPClient(_av[2], std::stoi(_av[3]));
+        this->_g->_tcp_clt->send(std::string("Hello World"));
+        return (0);
     } else if (utilities::Check::strIsEqual("udp", type)) {
-        std::cout << "CLIENT UDP: Todo" << std::endl;
+        this->_g->createUDPClient(_av[2], _av[3]);
+        this->_g->_udp_clt->send(std::string("Hello World"));
+        return (0);
     }
     return this->invalidArgs();
 }
@@ -120,7 +126,7 @@ int ParserArgs::handler()
         return this->basicArgs();
     else if (_ac == 4 && utilities::Check::strIsEqual("server", _av[1]))
         return this->handleServer();
-    else if (_ac == 5 && && utilities::Check::strIsEqual("client", _av[1]))
+    else if (_ac == 5 && utilities::Check::strIsEqual("client", _av[1]))
         return this->handleClient();
     return this->invalidArgs();
 }

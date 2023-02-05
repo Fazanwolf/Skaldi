@@ -1,10 +1,9 @@
 #ifndef PARSER_ARGS_HPP
 #define PARSER_ARGS_HPP
 
-
 #include <iostream>
 #include <cstring>
-#include "Skaldi.hpp"
+#include <Skaldi.hpp>
 #include "utilities/Utilities.hpp"
 
 #define HELPER "Skaldi\n"\
@@ -41,12 +40,12 @@ class ParserArgs {
 public:
     ParserArgs(int ac = 1, char **av = nullptr);
     ~ParserArgs();
-    void handler();
+    int handler();
 
 protected:
     int basicArgs();
     int handleServer();
-    int handlerClient();
+    int handleClient();
     int invalidArgs();
 
 private:
