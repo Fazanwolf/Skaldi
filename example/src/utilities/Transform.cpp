@@ -12,11 +12,9 @@ namespace utilities {
         std::transform(str.begin(), str.end(), str.begin(), ::tolower);
     }
 
-    void Transform::trim(std::string *str)
+    void Transform::trim(std::string &str)
     {
-        std::string trimmed =
-            std::regex_replace(&str, std::regex("^ +| +$|( ) +"), "$1");
-        *str = trimmed;
+        str = std::regex_replace(str, std::regex("^ +| +$|( ) +"), "$1");
     }
 
 }
