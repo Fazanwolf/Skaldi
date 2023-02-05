@@ -13,6 +13,11 @@ If you have a bug or an idea, read the [open issues][(https://github.com/Fazanwo
 ## Submitting a pull request
 
 1. [Fork](https://github.com/Fazanwolf/Skaldi/fork) and clone the repository
+2. Create a new branch: `git checkout -b feature/name-feature`
+3. Build the project `cmake -B build -S . && cmake --build build --config Release` and run the tests `cmake --build build --config Release --target test`
+4. Make your change, add tests, and make sure the tests still pass
+5. Push to your fork and [submit a pull request](https://github.com/Fazanwolf/Skaldi/pulls)
+6. Pat yourself on the back and wait for your pull request to be reviewed and merged.
 
 Here are a few things you can do that will increase the likelihood of your pull request being accepted:
 
