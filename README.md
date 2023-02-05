@@ -51,7 +51,6 @@ If you have any questions, feel free open an issue on the [GitHub repository](ht
 
 ## Authors
 
-Contributors:
 * [Fazanwolf](https://github.com/Fazanwolf)
 * [Alwyn974](https://github.com/Alwyn974)
 
