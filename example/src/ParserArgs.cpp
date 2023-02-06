@@ -67,10 +67,12 @@ int ParserArgs::handleServer()
     utilities::Transform::toLower(type);
 
     if (utilities::Check::strIsEqual("tcp", type)) {
-        this->_g->createTCPServer(std::stoi(_av[3]));
+        this->_g->TCPServer(std::stoi(_av[3]));
+        this->_g->run();
         return (0);
     } else if (utilities::Check::strIsEqual("udp", type)) {
-        this->_g->createUDPServer(std::stoi(_av[3]));
+        this->_g->UDPServer(std::stoi(_av[3]));
+        this->_g->run();
         return (0);
     }
     return this->invalidArgs();
@@ -90,12 +92,15 @@ int ParserArgs::handleClient()
     utilities::Transform::toLower(type);
 
     if (utilities::Check::strIsEqual("tcp", type)) {
-        this->_g->createTCPClient(_av[2], std::stoi(_av[3]));
+        this->_g->TCPClient(_av[3], std::stoi(_av[4]));
         this->_g->_tcp_clt->send(std::string("Hello World"));
+        this->_g->run();
         return (0);
-    } else if (utilities::Check::strIsEqual("udp", type)) {
-        this->_g->createUDPClient(_av[2], _av[3]);
-        this->_g->_udp_clt->send(std::string("Hello World"));
+    }
+    if (utilities::Check::strIsEqual("udp", type)) {
+        this->_g->UDPClient(_av[3], _av[4]);
+        this->_g->_udp_clt->getInput();
+        this->_g->run();
         return (0);
     }
     return this->invalidArgs();
@@ -110,7 +115,7 @@ int ParserArgs::basicArgs()
 {
     if (utilities::Check::isAlias(_av[1], "--help", "-h"))
         return this->helper();
-    else if (utilities::Check::isAlias(_av[1], "--version", "-v"))
+    if (utilities::Check::isAlias(_av[1], "--version", "-v"))
         return this->version();
     return this->invalidArgs();
 }
@@ -124,9 +129,9 @@ int ParserArgs::handler()
 {
     if (_ac == 2)
         return this->basicArgs();
-    else if (_ac == 4 && utilities::Check::strIsEqual("server", _av[1]))
+    if (_ac == 4 && utilities::Check::strIsEqual("server", _av[1]))
         return this->handleServer();
-    else if (_ac == 5 && utilities::Check::strIsEqual("client", _av[1]))
+    if (_ac == 5 && utilities::Check::strIsEqual("client", _av[1]))
         return this->handleClient();
     return this->invalidArgs();
 }

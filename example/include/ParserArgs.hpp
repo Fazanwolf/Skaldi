@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cstring>
-#include <Skaldi.hpp>
+#include "Skaldi.hpp"
 #include "utilities/Utilities.hpp"
 
 #define HELPER "Skaldi\n"\
