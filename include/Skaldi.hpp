@@ -20,17 +20,23 @@ namespace Skaldi {
     public:
         Skaldi();
         ~Skaldi() = default;
-        void createUDPServer(unsigned short port);
-        void createTCPServer(unsigned short port);
-        void createUDPClient(const std::string &ip, const std::string &port);
-        void createTCPClient(std::string ip, unsigned short port);
+        void UDPServer(unsigned short port);
+        void TCPServer(unsigned short port);
 
-        server::UDP *_udp_srv;
-        server::TCP *_tcp_srv;
+        void UDPClient(const std::string &ip, const std::string &port);
+        void getInputUDPClient();
+
+        void TCPClient(std::string ip, unsigned short port);
+
+        void run();
+
+
         client::UDP *_udp_clt;
         client::TCP *_tcp_clt;
     private:
         boost::asio::io_service _io_service;
+        server::UDP *_udp_srv;
+        server::TCP *_tcp_srv;
     };
 };
 

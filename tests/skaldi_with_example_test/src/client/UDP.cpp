@@ -7,6 +7,7 @@ namespace Skaldi::client {
         boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, port);
         boost::asio::ip::udp::resolver::iterator endpoints = _resolver.resolve(query);
         _remote_endpoint = *endpoints;
+        this->send("Hi, i'm new!");
     }
 
     UDP::~UDP()
@@ -14,11 +15,24 @@ namespace Skaldi::client {
         _socket.close();
     }
 
+    void UDP::getInput()
+    {
+        std::thread t([&]() {
+            while (true) {
+                spdlog::info("Enter input (type 'exit' to stop): ");
+                std::string message;
+                std::getline(std::cin, message);
+                if (message == "exit")
+                    std::exit(0);
+                this->send(message);
+            }
+        });
+        t.detach();
+    }
+
     void UDP::send(const std::string &message)
     {
-        boost::array<char, 1024> send_buf;
-        std::copy(message.begin(), message.end(), send_buf.begin());
-        _socket.async_send_to(boost::asio::buffer(send_buf), _remote_endpoint,
+        _socket.async_send_to(boost::asio::buffer(message), _remote_endpoint,
                               boost::bind(&UDP::handleSend, this,
                                           boost::asio::placeholders::error
                               )
@@ -38,7 +52,7 @@ namespace Skaldi::client {
     void UDP::handleSend(const boost::system::error_code &error)
     {
         if (!error) {
-            spdlog::info("Data send.");
+//            spdlog::info("Data send.");
             this->receive();
         }
     }

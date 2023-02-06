@@ -6,29 +6,35 @@ namespace Skaldi {
     {
     }
 
-    void Skaldi::createUDPServer(unsigned short port)
+    void Skaldi::UDPServer(unsigned short port)
     {
         _udp_srv = new server::UDP(_io_service, port);
-        _io_service.run();
     }
 
-    void Skaldi::createTCPServer(unsigned short port)
+    void Skaldi::TCPServer(unsigned short port)
     {
         _tcp_srv = new server::TCP(_io_service, port);
-        _io_service.run();
     }
 
-    void Skaldi::createUDPClient(const std::string &ip, const std::string &port)
+    void Skaldi::UDPClient(const std::string &ip, const std::string &port)
     {
         _udp_clt = new client::UDP(_io_service, ip, port);
-        _udp_clt->send("Hello it's a test for UDP server");
+    }
+
+    void Skaldi::getInputUDPClient()
+    {
+        _udp_clt->getInput();
+    }
+
+    void Skaldi::run()
+    {
         _io_service.run();
     }
 
-    void Skaldi::createTCPClient(std::string ip, unsigned short port)
+
+    void Skaldi::TCPClient(std::string ip, unsigned short port)
     {
         _tcp_clt = new client::TCP(_io_service, ip, port);
-        _io_service.run();
     }
 
 }

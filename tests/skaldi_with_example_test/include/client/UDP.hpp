@@ -5,6 +5,7 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
+#include <thread>
 #include <iostream>
 
 namespace Skaldi::client {
@@ -13,6 +14,7 @@ namespace Skaldi::client {
     public:
         UDP(boost::asio::io_service &io_service, const std::string &host, const std::string &port);
         ~UDP();
+        void getInput();
         void send(const std::string &message);
         void receive();
 

@@ -26,7 +26,7 @@ namespace Skaldi::server {
         void handleReceive(const boost::system::error_code &error, std::size_t bytes_transferred);
         void handleSend(const boost::system::error_code &error, boost::asio::ip::udp::endpoint &endpoint);
 
-
+        unsigned short _nb_client;
         boost::asio::ip::udp::socket _socket;
         boost::asio::ip::udp::endpoint _remote_endpoint;
         std::array<char, 1024> _buffer;
