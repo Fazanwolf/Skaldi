@@ -84,10 +84,10 @@ namespace sk::server {
             // Print the message received and the name of the client
             if (!error || error == boost::asio::error::message_size) {
                 this->broadcast(std::stoi(_clients[_remote_endpoint]), std::string(_buffer.data(), _buffer.data() + bytes_transferred));
-                if (bytes_transferred < 3) {
-                    spdlog::info("Bitset received from {}: {}", _clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
-                    return receive();
-                }
+//                if (bytes_transferred <= 3) {
+//                    spdlog::info("Bitset received from {}: {}", _clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+//                    return receive();
+//                }
                 spdlog::info("Data received from {}: {}", _clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
                 return receive();
             }
