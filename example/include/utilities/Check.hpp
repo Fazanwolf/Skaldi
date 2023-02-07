@@ -2,7 +2,6 @@
 #define UTILITIES_CHECK_HPP
 
 #include <iostream>
-#include <cstring>
 #include <regex>
 
 namespace utilities {
