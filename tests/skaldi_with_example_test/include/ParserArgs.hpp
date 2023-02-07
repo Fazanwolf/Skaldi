@@ -19,7 +19,7 @@
 "         [ip]            The target ip, needed only for client base.\n"\
 "         port            The port to use.\n\n" \
 "EXAMPLES\n"\
-"    ./test server udp 5000\n"                \
+"    ./test server udp 5000\n"               \
 "    ./test client udp 0.0.0.0 5000\n"        \
 "    ./test server tcp 5001\n"                \
 "    ./test client tcp 0.0.0.0 5001\n\n"\
@@ -54,7 +54,7 @@ private:
 
     int _ac;
     char **_av;
-    Skaldi::Skaldi *_g;
+    sk::Skaldi *_g;
 };
 
 #endif //PARSER_ARGS_HPP
