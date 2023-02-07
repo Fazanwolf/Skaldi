@@ -10,7 +10,7 @@ ParserArgs::ParserArgs(int ac, char **av)
 {
     this->_ac = ac;
     this->_av = av;
-    this->_g = new Skaldi::Skaldi();
+    this->_g = new sk::Skaldi();
 }
 
 /**
@@ -72,6 +72,8 @@ int ParserArgs::handleServer()
         return (0);
     } else if (utilities::Check::strIsEqual("udp", type)) {
         this->_g->UDPServer(std::stoi(_av[3]));
+        this->_g->getInputUDPServer();
+        this->_g->enableBroadcast();
         this->_g->run();
         return (0);
     }
@@ -99,7 +101,7 @@ int ParserArgs::handleClient()
     }
     if (utilities::Check::strIsEqual("udp", type)) {
         this->_g->UDPClient(_av[3], _av[4]);
-        this->_g->_udp_clt->getInput();
+        this->_g->getInputUDPClient();
         this->_g->run();
         return (0);
     }

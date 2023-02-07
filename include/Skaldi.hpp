@@ -14,21 +14,26 @@
 #include "client/TCP.hpp"
 #include "client/UDP.hpp"
 
-namespace Skaldi {
+namespace sk {
 
     class Skaldi {
     public:
         Skaldi();
         ~Skaldi() = default;
         void UDPServer(unsigned short port);
+        void getInputUDPServer();
+
         void TCPServer(unsigned short port);
 
         void UDPClient(const std::string &ip, const std::string &port);
-        void getInputUDPClient();
+        void getInputUDPClient() const;
 
         void TCPClient(std::string ip, unsigned short port);
 
         void run();
+
+        void enableBroadcast();
+        void disableBroadcast();
 
 
         client::UDP *_udp_clt;
