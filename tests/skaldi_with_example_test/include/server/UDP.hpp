@@ -24,18 +24,19 @@ namespace sk::server {
         void getInput();
         void setBroadcasting(bool able);
 
-    private:
+    protected:
         void broadcast(const int &id, const std::string &message);
         void receive();
         void handleReceive(const boost::system::error_code &error, std::size_t bytes_transferred);
         void handleSend(const boost::system::error_code &error, boost::asio::ip::udp::endpoint &endpoint, const std::string &message);
 
+    private:
         unsigned short _nb_client;
         boost::asio::ip::udp::socket _socket;
         boost::asio::ip::udp::endpoint _remote_endpoint;
         std::array<char, 1024> _buffer;
         bool _broadcasting;
-        std::map<boost::asio::ip::udp::endpoint, std::string> _clients;
+        std::map<boost::asio::ip::udp::endpoint, int> _clients;
     };
 }
 

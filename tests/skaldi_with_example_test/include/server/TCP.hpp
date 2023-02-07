@@ -8,12 +8,13 @@
 #include <memory>
 #include <iostream>
 
-namespace Skaldi::server {
+namespace sk::server {
 
     class TCP {
     public:
         TCP(boost::asio::io_service &io_service, unsigned short port);
         ~TCP() = default;
+        void setBroadcasting(bool able);
 
     private:
         void startAccept();
@@ -21,6 +22,7 @@ namespace Skaldi::server {
         std::string getAddressFromLocalEndpoint();
         boost::asio::ip::tcp::acceptor _acceptor;
         boost::asio::io_service &_io_service;
+        bool _broadcasting;
     };
 }
 

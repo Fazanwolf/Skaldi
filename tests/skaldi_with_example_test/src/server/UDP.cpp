@@ -54,7 +54,7 @@ namespace sk::server {
     {
         if (_broadcasting) {
             for (auto &[key, val]: _clients) {
-                if (val != std::to_string(id)) {
+                if (val != id) {
                     boost::asio::ip::udp::endpoint endpoint = key;
                     this->send(std::to_string(id) + " " + message, endpoint);
                 }
@@ -75,15 +75,15 @@ namespace sk::server {
         if (!error) {
             // Add the client endpoint to the map if it doesn't exist
             if (_clients.find(_remote_endpoint) == _clients.end()) {
-                _clients[_remote_endpoint] = std::to_string(_nb_client);
-                send(_clients[_remote_endpoint], _remote_endpoint);
+                _clients[_remote_endpoint] = _nb_client;
+                send(std::to_string(_clients[_remote_endpoint]), _remote_endpoint);
                 spdlog::info("First connection of {}",  _clients[_remote_endpoint]);
                 _nb_client++;
             }
 
             // Print the message received and the name of the client
             if (!error || error == boost::asio::error::message_size) {
-                this->broadcast(std::stoi(_clients[_remote_endpoint]), std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+                this->broadcast(_clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
 //                if (bytes_transferred <= 3) {
 //                    spdlog::info("Bitset received from {}: {}", _clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
 //                    return receive();

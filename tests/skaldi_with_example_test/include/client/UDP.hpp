@@ -5,10 +5,11 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
+#include <bitset>
 #include <thread>
 #include <iostream>
 
-namespace Skaldi::client {
+namespace sk::client {
 
     class UDP {
     public:
@@ -19,7 +20,7 @@ namespace Skaldi::client {
         void receive();
 
     private:
-        void handleSend(const boost::system::error_code &error);
+        void handleSend(const boost::system::error_code &error, const std::string &message);
         void handleReceive(const boost::system::error_code &error, std::size_t bytes_transferred);
 
         boost::asio::ip::udp::socket _socket;

@@ -1,6 +1,6 @@
 #include "server/TCP.hpp"
 
-namespace Skaldi::server {
+namespace sk::server {
 
     TCP::TCP(boost::asio::io_service &io_service, unsigned short port) : _io_service(io_service), _acceptor(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
     {
@@ -26,5 +26,10 @@ namespace Skaldi::server {
     {
         auto endpoint = _acceptor.local_endpoint();
         return endpoint.address().to_string();
+    }
+
+    void TCP::setBroadcasting(bool able)
+    {
+        this->_broadcasting = able;
     }
 }

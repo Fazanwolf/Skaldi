@@ -7,7 +7,7 @@
 #include <boost/array.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace Skaldi::client {
+namespace sk::client {
 
 #include "boost/asio.hpp"
 #include <iostream>

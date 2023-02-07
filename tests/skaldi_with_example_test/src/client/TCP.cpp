@@ -1,6 +1,6 @@
 #include "client/TCP.hpp"
 
-namespace Skaldi::client {
+namespace sk::client {
 
     TCP::TCP(boost::asio::io_service &io_service, const std::string &host, unsigned short port) : _socket(io_service)
     {
