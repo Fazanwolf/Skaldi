@@ -10,7 +10,13 @@ ParserArgs::ParserArgs(int ac, char **av)
 {
     this->_ac = ac;
     this->_av = av;
-    this->_g = new sk::Skaldi();
+
+    this->udp = nullptr;
+    this->tcp = nullptr;
+    this->clt_tcp = nullptr;
+    this->clt_udp = nullptr;
+    this->srv_tcp = nullptr;
+    this->srv_udp = nullptr;
 }
 
 /**
@@ -18,6 +24,18 @@ ParserArgs::ParserArgs(int ac, char **av)
  */
 ParserArgs::~ParserArgs()
 {
+    if (this->udp != nullptr)
+        delete this->udp;
+    if (this->tcp != nullptr)
+        delete this->tcp;
+    if (this->clt_tcp != nullptr)
+        delete this->clt_tcp;
+    if (this->clt_udp != nullptr)
+        delete this->clt_udp;
+    if (this->srv_tcp != nullptr)
+        delete this->srv_tcp;
+    if (this->srv_udp != nullptr)
+        delete this->srv_udp;
 }
 
 /**
@@ -65,16 +83,20 @@ int ParserArgs::handleServer()
 
     std::string type = std::string(_av[2]);
     utilities::Transform::toLower(type);
+    const unsigned short port = static_cast<unsigned short>(std::stoi(_av[3]));
 
     if (utilities::Check::strIsEqual("tcp", type)) {
-        this->_g->TCPServer(std::stoi(_av[3]));
-        this->_g->run();
+        this->srv_tcp = new sk::Skaldi<sk::client::TCP, sk::server::TCP>(port);
+        this->srv_tcp->server->setBroadcasting(true);
+        this->srv_tcp->server->getInput();
+        this->srv_tcp->run();
         return (0);
-    } else if (utilities::Check::strIsEqual("udp", type)) {
-        this->_g->UDPServer(std::stoi(_av[3]));
-        this->_g->getInputUDPServer();
-        this->_g->enableBroadcast();
-        this->_g->run();
+    }
+    if (utilities::Check::strIsEqual("udp", type)) {
+        this->srv_udp = new sk::Skaldi<sk::client::UDP, sk::server::UDP>(port);
+        this->srv_udp->server->setBroadcasting(true);
+        this->srv_udp->server->getInput();
+        this->srv_udp->run();
         return (0);
     }
     return this->invalidArgs();
@@ -94,15 +116,15 @@ int ParserArgs::handleClient()
     utilities::Transform::toLower(type);
 
     if (utilities::Check::strIsEqual("tcp", type)) {
-        this->_g->TCPClient(_av[3], std::stoi(_av[4]));
-        this->_g->_tcp_clt->send(std::string("Hello World"));
-        this->_g->run();
+        this->clt_tcp = new sk::Skaldi<sk::client::TCP, sk::server::TCP>(_av[3], _av[4]);
+        this->clt_tcp->client->getInput();
+        this->clt_tcp->run();
         return (0);
     }
     if (utilities::Check::strIsEqual("udp", type)) {
-        this->_g->UDPClient(_av[3], _av[4]);
-        this->_g->getInputUDPClient();
-        this->_g->run();
+        this->clt_udp = new sk::Skaldi<sk::client::UDP, sk::server::UDP>(_av[3], _av[4]);
+        this->clt_udp->client->getInput();
+        this->clt_udp->run();
         return (0);
     }
     return this->invalidArgs();

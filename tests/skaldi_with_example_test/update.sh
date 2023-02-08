@@ -3,14 +3,11 @@
 # Update library with the latest tested version of Skaldi
 
 ## Update CPP files
-cp src/Skaldi.cpp ../../src/Skaldi.cpp
-cp -r src/client ../../src/
-cp -r src/server ../../src/
+cp -r src/core ../../src/
 
 ## Update Header files
 cp include/Skaldi.hpp ../../include/Skaldi.hpp
-cp -r include/client ../../include/
-cp -r include/server ../../include/
+cp -r include/core ../../include/
 
 # Update example with the latest tested version of Skaldi
 

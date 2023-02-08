@@ -1,12 +1,13 @@
-#include "server/UDP.hpp"
+#include "core/server_type/UDP.hpp"
 
 namespace sk::server {
 
-    UDP::UDP(boost::asio::io_service &io_service, unsigned short port) : _socket(io_service, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+    UDP::UDP(boost::asio::io_service &ioService, unsigned short port) : _socket(ioService, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
     {
-        _nb_client = 0;
-        spdlog::info("UDP Server started {} on port {} ", _remote_endpoint.address().to_string(), port);
-        receive();
+        _nbClient = 0;
+        _broadcasting = false;
+        spdlog::info("UDP Server started {} on port {} ", _remoteEndpoint.address().to_string(), port);
+        this->receive();
     }
 
     UDP::~UDP()
@@ -37,7 +38,7 @@ namespace sk::server {
 
     void UDP::receive()
     {
-        _socket.async_receive_from(boost::asio::buffer(_buffer), _remote_endpoint,
+        _socket.async_receive_from(boost::asio::buffer(_buffer), _remoteEndpoint,
                                    boost::bind(&UDP::handleReceive, this,
                                                boost::asio::placeholders::error,
                                                boost::asio::placeholders::bytes_transferred
@@ -74,21 +75,21 @@ namespace sk::server {
     {
         if (!error) {
             // Add the client endpoint to the map if it doesn't exist
-            if (_clients.find(_remote_endpoint) == _clients.end()) {
-                _clients[_remote_endpoint] = _nb_client;
-                send(std::to_string(_clients[_remote_endpoint]), _remote_endpoint);
-                spdlog::info("First connection of {}",  _clients[_remote_endpoint]);
-                _nb_client++;
+            if (_clients.find(_remoteEndpoint) == _clients.end()) {
+                _clients[_remoteEndpoint] = _nbClient;
+                send(std::to_string(_clients[_remoteEndpoint]), _remoteEndpoint);
+                spdlog::info("First connection of {}",  _clients[_remoteEndpoint]);
+                _nbClient++;
             }
 
             // Print the message received and the name of the client
             if (!error || error == boost::asio::error::message_size) {
-                this->broadcast(_clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+                this->broadcast(_clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
 //                if (bytes_transferred <= 3) {
-//                    spdlog::info("Bitset received from {}: {}", _clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+//                    spdlog::info("Bitset received from {}: {}", _clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
 //                    return receive();
 //                }
-                spdlog::info("Data received from {}: {}", _clients[_remote_endpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+                spdlog::info("Data received from {}: {}", _clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
                 return receive();
             }
         }
