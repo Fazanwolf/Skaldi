@@ -1,47 +1,75 @@
-//
-// Created by fazanwolf on 1/9/23.
-//
-
 #ifndef SKALDI_HPP
 #define SKALDI_HPP
 
-#include <iostream>
-
 #include <spdlog/spdlog.h>
-
-#include "server/TCP.hpp"
-#include "server/UDP.hpp"
-#include "client/TCP.hpp"
-#include "client/UDP.hpp"
+#include "core/Server.hpp"
+#include "core/Client.hpp"
 
 namespace sk {
 
+    /**
+     * @brief Class Skaldi that will be used to create a client or a server
+     * @tparam ClientType
+     * @tparam ServerType
+     */
+    template<typename ClientType, typename ServerType>
     class Skaldi {
     public:
-        Skaldi();
-        ~Skaldi() = default;
-        void UDPServer(unsigned short port);
-        void getInputUDPServer();
+        /**
+         * @brief Constructor of Skaldi
+         * @details Constructor of Skaldi that will create a client and a server
+         * @param host
+         * @param port
+         */
+        Skaldi(const std::string &host, unsigned short port)
+        {
+            client = new Client<ClientType>(_ioService, host, std::to_string(port));
+            server = new Server<ServerType>(_ioService, port);
+        }
 
-        void TCPServer(unsigned short port);
+        /**
+         * @brief Constructor of Skaldi
+         * @details Constructor of Skaldi that will create a client
+         * @param host
+         * @param port
+         */
+        Skaldi(const std::string &host, const std::string &port)
+        {
+            client = new Client<ClientType>(_ioService, host, port);
+        }
 
-        void UDPClient(const std::string &ip, const std::string &port);
-        void getInputUDPClient() const;
+        /**
+         * @brief Constructor of Skaldi
+         * @details Constructor of Skaldi that will create a server
+         * @param port
+         */
+        explicit Skaldi(unsigned short port)
+        {
+            server = new Server<ServerType>(_ioService, port);
+        }
 
-        void TCPClient(std::string ip, unsigned short port);
+        /**
+         * @brief Destructor of Skaldi
+         * @details Destructor of Skaldi that will delete the client or the server
+         */
+        ~Skaldi()
+        {
+            if (client != nullptr)
+                delete client;
+            if (server != nullptr)
+                delete server;
+        }
 
-        void run();
+        void run()
+        {
+            _ioService.run();
+        }
 
-        void enableBroadcast();
-        void disableBroadcast();
+        Client<ClientType> *client;
+        Server<ServerType> *server;
 
-
-        client::UDP *_udp_clt;
-        client::TCP *_tcp_clt;
     private:
-        boost::asio::io_service _io_service;
-        server::UDP *_udp_srv;
-        server::TCP *_tcp_srv;
+        boost::asio::io_service _ioService;
     };
 };
 

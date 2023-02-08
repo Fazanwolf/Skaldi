@@ -21,9 +21,8 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF) # Fix dll issues on Windo
 
 add_executable(${PROJECT_NAME} src/main.cpp src/ParserArgs.cpp
         src/utilities/Check.cpp src/utilities/Transform.cpp
-        src/client/TCP.cpp src/client/UDP.cpp
-        src/server/TCP.cpp src/server/UDP.cpp
-        src/Skaldi.cpp
+        src/core/client_type/TCP.cpp src/core/client_type/UDP.cpp
+        src/core/server_type/TCP.cpp src/core/server_type/UDP.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
