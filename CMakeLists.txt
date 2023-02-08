@@ -20,7 +20,7 @@ option(USE_CLANG_TIDY_WITH_FIX "Use clang-tidy with fix" OFF)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF) # Fix dll issues on Windows
 
 
-add_library(${PROJECT_NAME} src/Skaldi.cpp
+add_library(${PROJECT_NAME}
         src/client/TCP.cpp src/client/UDP.cpp
         src/server/TCP.cpp src/server/UDP.cpp
 )
