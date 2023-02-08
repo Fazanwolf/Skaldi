@@ -21,8 +21,8 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF) # Fix dll issues on Windo
 
 
 add_library(${PROJECT_NAME}
-        src/client/TCP.cpp src/client/UDP.cpp
-        src/server/TCP.cpp src/server/UDP.cpp
+        src/core/client_type/TCP.cpp src/core/client_type/UDP.cpp
+        src/core/server_type/TCP.cpp src/core/server_type/UDP.cpp
 )
 
 #add_executable(${PROJECT_NAME}-exe main.cpp)
