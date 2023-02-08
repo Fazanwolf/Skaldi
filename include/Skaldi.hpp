@@ -65,6 +65,21 @@ namespace sk {
             _ioService.run();
         }
 
+        void runOne()
+        {
+            _ioService.run_one();
+        }
+
+        void poll()
+        {
+            _ioService.poll();
+        }
+
+        void pollOne()
+        {
+            _ioService.poll_one();
+        }
+
         Client<ClientType> *client;
         Server<ServerType> *server;
 
