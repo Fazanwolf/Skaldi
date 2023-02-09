@@ -15,11 +15,11 @@ namespace sk::client {
         /**
          * @brief Constructor of the UDP client
          * @details Constructor of the UDP client that will create a socket and a resolver to connect to the server
-         * @param ioService
+         * @param ioContext Asio io_context
          * @param host
          * @param port
          */
-        UDP(boost::asio::io_service &ioService, const std::string &host, const std::string &port);
+        UDP(boost::asio::io_context &ioContext, const std::string &host, const std::string &port);
         /**
          * @brief Destructor of the UDP client
          * @details Destructor of the UDP client that will close the socket

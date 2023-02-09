@@ -9,9 +9,9 @@ namespace sk {
     template <typename ServerType>
     class Server : public IServer {
     public:
-        Server(boost::asio::io_service &ioService, unsigned short port)
+        Server(boost::asio::io_context &ioContext, unsigned short port)
         {
-            _server = new ServerType(ioService, port);
+            _server = new ServerType(ioContext, port);
         }
 
         virtual ~Server() override

@@ -131,9 +131,10 @@ int ParserArgs::handleClient()
         this->clt_udp->client->setDebugging(false);
         this->clt_udp->client->setFirstConnection(true);
         this->clt_udp->client->firstConnection("?");
+        this->clt_udp->client->receive();
 //        std::string msg = this->clt_udp->client->getBuffer();
 //        std::cout << "variable: " << msg << std::endl;
-        this->clt_udp->client->getInput();
+//        this->clt_udp->client->getInput();
         this->clt_udp->run();
         return (0);
     }

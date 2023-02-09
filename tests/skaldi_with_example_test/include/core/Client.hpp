@@ -23,9 +23,9 @@ namespace sk {
          * @param host IP address of the server
          * @param port Port of the server
          */
-        Client(boost::asio::io_service &ioService, const std::string &host, const std::string &port)
+        Client(boost::asio::io_context &ioContext, const std::string &host, const std::string &port)
         {
-            _client = new ClientType(ioService, host, port);
+            _client = new ClientType(ioContext, host, port);
         };
 
         /**
