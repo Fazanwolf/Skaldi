@@ -72,7 +72,7 @@ namespace sk::client {
     {
         if (!error) {
             if (_debugging) spdlog::info("Data send: {}", message);
-//            return this->receive();
+            return this->receive();
         }
     }
 
@@ -85,8 +85,7 @@ namespace sk::client {
     {
         if (!error || error == boost::asio::error::message_size) {
             const std::string message(_buffer.data(), _buffer.data() + bytesTransferred);
-            if (_debugging)
-                spdlog::info("Server send: {}", message);
+            if (_debugging) spdlog::info("Server send: {}", message);
             return this->receive();
         }
     }
