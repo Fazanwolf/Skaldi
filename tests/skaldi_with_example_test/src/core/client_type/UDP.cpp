@@ -60,7 +60,7 @@ namespace sk::client {
 
     void UDP::setDebugging(bool isDebugging)
     {
-        _isDebugging = isDebugging;
+        _debugging = isDebugging;
     };
 
     void UDP::setFirstConnection(bool isExecuted)
@@ -80,7 +80,10 @@ namespace sk::client {
     {
         if (!error || error == boost::asio::error::message_size) {
             const std::string message(_buffer.data(), _buffer.data() + bytesTransferred);
-            (_debugging ? spdlog::info("Server send: {}", message) : std::cout << message << std::endl);
+            if (_debugging)
+                spdlog::info("Server send: {}", message);
+            else
+                std::cout << message << std::endl;
             return this->receive();
         }
     }

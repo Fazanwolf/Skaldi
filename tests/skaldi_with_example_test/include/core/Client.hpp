@@ -86,15 +86,12 @@ namespace sk {
         /**
          * @brief First connection into the server
          * @details Do the function passed as parameter when the client is connected to the server for the first time
-         * @tparam R
-         * @tparam Args
-         * @param func
-         * @param args
+         * @param data
+         * @return void
          */
-        template<typename R, typename... Args>
-        void firstConnection(std::function<R(Args...)> func, Args... args)
+        void firstConnection(const std::string &data)
         {
-            _client->firstConnection(func, args...);
+            _client->firstConnection(data);
         };
 
     protected:

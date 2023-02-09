@@ -52,6 +52,12 @@ namespace sk::client {
          * @return void
          */
         void receive() override;
+        /**
+         * @brief Enable or disable the debugging mode
+         * @details Enable or disable the debugging mode
+         * @param isDebugging
+         * @return void
+         */
         void setDebugging(bool isDebugging) override;
         /**
          * @brief Enable or disable the first connection function
@@ -63,14 +69,11 @@ namespace sk::client {
         /**
          * @brief First connection into the server
          * @details Do the function passed as parameter when the client is connected to the server for the first time
-         * @tparam R
-         * @tparam Args
-         * @param func
-         * @param args
+         * @param data
          */
-        template<typename R, typename... Args> void firstConnection(std::function<R(Args...)> func, Args... args)
+        void firstConnection(const std::string &data)
         {
-            if (_isExecuted) func(args...);
+            if (_isExecuted) this->send(data);
         };
 
         /**
@@ -113,7 +116,7 @@ namespace sk::client {
          */
         boost::array<char, 1024> _buffer {};
         bool _isExecuted = false;
-        bool _isDebugging = false;
+        bool _debugging = false;
     };
 }
 
