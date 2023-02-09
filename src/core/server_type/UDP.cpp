@@ -2,7 +2,7 @@
 
 namespace sk::server {
 
-    UDP::UDP(boost::asio::io_service &ioService, unsigned short port) : _socket(ioService, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+    UDP::UDP(boost::asio::io_context &ioContext, unsigned short port) : _socket(ioContext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
     {
         _nbClient = 0;
         _broadcasting = false;

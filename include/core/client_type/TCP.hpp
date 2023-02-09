@@ -3,6 +3,7 @@
 
 #include "spdlog/spdlog.h"
 #include "core/IClient.hpp"
+#include <iostream>
 
 namespace sk::client {
 
@@ -15,11 +16,11 @@ namespace sk::client {
         /**
          * @brief Constructor of the TCP client
          * @details Constructor of the TCP client that will create a socket and a resolver to connect to the server
-         * @param ioService
+         * @param ioContext
          * @param host
          * @param port
          */
-        TCP(boost::asio::io_service &ioService, const std::string &host, const std::string &port);
+        TCP(boost::asio::io_context &ioContext, const std::string &host, const std::string &port);
         /**
          * @brief Destructor of the TCP client
          * @details Destructor of the TCP client that will close the socket
@@ -66,6 +67,12 @@ namespace sk::client {
          * @return void
          */
         void setFirstConnection(bool isExecuted) override;
+        /**
+         * @brief Get the buffer
+         * @details Get the buffer
+         * @return std::string
+         */
+        std::string getBuffer() override;
 
         /**
          * @brief First connection into the server
@@ -105,6 +112,11 @@ namespace sk::client {
          * @details Socket of the client that will be used to send and receive messages
          */
         boost::asio::ip::tcp::socket _socket;
+        /**
+         * @brief Buffer of the client
+         * @details A buffer to store the messages received
+         */
+        boost::array<char, 1024> _buffer {};
         bool _isDebugging = false;
         bool _isExecuted = false;
     };

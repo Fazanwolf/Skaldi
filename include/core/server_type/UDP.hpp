@@ -21,10 +21,10 @@ namespace sk::server {
             /**
              * @brief Constructor of the UDP Server
              * @details Constructor of the UDP Server that will create a socket and a resolver to connect to the server
-             * @param ioService
+             * @param ioContext
              * @param port
              */
-            UDP(boost::asio::io_service &ioService, unsigned short port);
+            UDP(boost::asio::io_context &ioContext, unsigned short port);
             /**
              * @brief Destructor of the UDP Server
              * @details Destructor of the UDP Server that will close the socket
@@ -112,7 +112,7 @@ namespace sk::server {
              * @brief Buffer
              * @details Buffer to receive messages
              */
-            std::array<char, 1024> _buffer;
+            std::array<char, 1024> _buffer{};
             /**
              * @brief Broadcasting
              * @details Determine if the Broadcasting of the server is enabled or not

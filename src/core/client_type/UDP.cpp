@@ -2,7 +2,7 @@
 
 namespace sk::client {
 
-    UDP::UDP(boost::asio::io_service &ioService, const std::string &host, const std::string &port) : _socket(ioService, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)), _resolver(ioService)
+    UDP::UDP(boost::asio::io_context &ioContext, const std::string &host, const std::string &port) : _socket(ioContext, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)), _resolver(ioContext)
     {
         const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, port);
         const boost::asio::ip::udp::resolver::iterator endpoints = _resolver.resolve(query);
@@ -72,9 +72,14 @@ namespace sk::client {
     {
         if (!error) {
             if (_debugging) spdlog::info("Data send: {}", message);
-            return this->receive();
+//            return this->receive();
         }
     }
+
+    std::string UDP::getBuffer()
+    {
+        return std::string(_buffer.data());
+    };
 
     void UDP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
     {

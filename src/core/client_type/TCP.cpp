@@ -2,9 +2,9 @@
 
 namespace sk::client {
 
-    TCP::TCP(boost::asio::io_service &ioService, const std::string &host, const std::string &port) : _socket(ioService)
+    TCP::TCP(boost::asio::io_context &ioContext, const std::string &host, const std::string &port) : _socket(ioContext)
     {
-        boost::asio::ip::tcp::resolver resolver(ioService);
+        boost::asio::ip::tcp::resolver resolver(ioContext);
         auto endpoints = resolver.resolve({host, port});
 
         boost::asio::connect(_socket, endpoints);
@@ -49,6 +49,11 @@ namespace sk::client {
     void TCP::setFirstConnection(bool isExecuted)
     {
         _isExecuted = isExecuted;
+    };
+
+    std::string TCP::getBuffer()
+    {
+        return std::string(_buffer.data());
     };
 
     void TCP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)

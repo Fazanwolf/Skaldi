@@ -2,18 +2,18 @@
 
 namespace sk::server {
 
-    TCP::TCP(boost::asio::io_service &ioService, unsigned short port) : _acceptor(ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
+    TCP::TCP(boost::asio::io_context &ioContext, unsigned short port) : _acceptor(ioContext, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port))
     {
-        startAccept(ioService);
+        startAccept(ioContext);
     }
 
     TCP::~TCP()
     {
     }
 
-    void TCP::startAccept(boost::asio::io_service &ioService)
+    void TCP::startAccept(boost::asio::io_context &ioContext)
     {
-        boost::shared_ptr<boost::asio::ip::tcp::socket> socket(new boost::asio::ip::tcp::socket(ioService));
+        boost::shared_ptr<boost::asio::ip::tcp::socket> socket(new boost::asio::ip::tcp::socket(ioContext));
 
         _acceptor.async_accept(*socket, boost::bind(&TCP::handleAccept, this, socket, boost::asio::placeholders::error));
     }

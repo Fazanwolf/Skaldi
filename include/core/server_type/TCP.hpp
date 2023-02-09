@@ -23,7 +23,7 @@ namespace sk::server {
     protected:
 
     private:
-        void startAccept(boost::asio::io_service &ioService);
+        void startAccept(boost::asio::io_context &ioContext);
         void handleAccept(boost::shared_ptr<boost::asio::ip::tcp::socket> socket, const boost::system::error_code &error);
         boost::asio::ip::tcp::acceptor _acceptor;
         bool _broadcasting;

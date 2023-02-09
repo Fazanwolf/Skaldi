@@ -23,8 +23,8 @@ namespace sk {
          */
         Skaldi(const std::string &host, unsigned short port)
         {
-            client = new Client<ClientType>(_ioService, host, std::to_string(port));
-            server = new Server<ServerType>(_ioService, port);
+            client = new Client<ClientType>(_ioContext, host, std::to_string(port));
+            server = new Server<ServerType>(_ioContext, port);
         }
 
         /**
@@ -35,7 +35,7 @@ namespace sk {
          */
         Skaldi(const std::string &host, const std::string &port)
         {
-            client = new Client<ClientType>(_ioService, host, port);
+            client = new Client<ClientType>(_ioContext, host, port);
         }
 
         /**
@@ -45,7 +45,7 @@ namespace sk {
          */
         explicit Skaldi(unsigned short port)
         {
-            server = new Server<ServerType>(_ioService, port);
+            server = new Server<ServerType>(_ioContext, port);
         }
 
         /**
@@ -62,14 +62,29 @@ namespace sk {
 
         void run()
         {
-            _ioService.run();
+            _ioContext.run();
+        }
+
+        void runOne()
+        {
+            _ioContext.run_one();
+        }
+
+        void pollOne()
+        {
+            _ioContext.poll_one();
+        }
+
+        void poll()
+        {
+            _ioContext.poll();
         }
 
         Client<ClientType> *client;
         Server<ServerType> *server;
 
     private:
-        boost::asio::io_service _ioService;
+        boost::asio::io_context _ioContext;
     };
 };
 
