@@ -52,7 +52,35 @@ namespace sk::client {
          * @return void
          */
         void receive() override;
+        /**
+         * @brief Set the debugging mode
+         * @details Set the debugging mode
+         * @param isDebugging
+         * @return void
+         */
+        void setDebugging(bool isDebugging) override;
+        /**
+         * @brief Set the first connection
+         * @details Set the first connection
+         * @param isExecuted
+         * @return void
+         */
+        void setFirstConnection(bool isExecuted) override;
 
+        /**
+         * @brief First connection into the server
+         * @details Do the function passed as parameter when the client is connected to the server for the first time
+         * @tparam R
+         * @tparam Args
+         * @param func
+         * @param args
+         */
+        template<typename R, typename... Args>
+        void firstConnection(std::function<R(Args...)> func, Args... args)
+        {
+            if (_isExecuted)
+                func(args...);
+        };
         /**
          * @brief Handle sent messages
          * @details Handle sent messages
@@ -77,6 +105,8 @@ namespace sk::client {
          * @details Socket of the client that will be used to send and receive messages
          */
         boost::asio::ip::tcp::socket _socket;
+        bool _isDebugging = false;
+        bool _isExecuted = false;
     };
 }
 

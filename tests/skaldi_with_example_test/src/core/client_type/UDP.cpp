@@ -7,7 +7,6 @@ namespace sk::client {
         const boost::asio::ip::udp::resolver::query query(boost::asio::ip::udp::v4(), host, port);
         const boost::asio::ip::udp::resolver::iterator endpoints = _resolver.resolve(query);
         _remoteEndpoint = *endpoints;
-        UDP::send(this, "new");
     }
 
     UDP::~UDP()
@@ -59,10 +58,20 @@ namespace sk::client {
         );
     }
 
+    void UDP::setDebugging(bool isDebugging)
+    {
+        _isDebugging = isDebugging;
+    };
+
+    void UDP::setFirstConnection(bool isExecuted)
+    {
+        _isExecuted = isExecuted;
+    };
+
     void UDP::handleSend(const boost::system::error_code &error, const std::string &message)
     {
         if (!error) {
-            spdlog::info("Data send: {}", message);
+            if (_debugging) spdlog::info("Data send: {}", message);
             return this->receive();
         }
     }
@@ -71,7 +80,7 @@ namespace sk::client {
     {
         if (!error || error == boost::asio::error::message_size) {
             const std::string message(_buffer.data(), _buffer.data() + bytesTransferred);
-            spdlog::info("Server send: {}", message);
+            (_debugging ? spdlog::info("Server send: {}", message) : std::cout << message << std::endl);
             return this->receive();
         }
     }

@@ -41,6 +41,16 @@ namespace sk::client {
     {
     }
 
+    void TCP::setDebugging(bool isDebugging)
+    {
+        _isDebugging = isDebugging;
+    };
+
+    void TCP::setFirstConnection(bool isExecuted)
+    {
+        _isExecuted = isExecuted;
+    };
+
     void TCP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
     {
     }

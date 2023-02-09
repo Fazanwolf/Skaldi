@@ -102,6 +102,11 @@ int ParserArgs::handleServer()
     return this->invalidArgs();
 }
 
+void test(int i)
+{
+    std::cout << "test" << i << std::endl;
+}
+
 /**
  * HandleClient function
  * Handle the client side arguments
@@ -123,6 +128,10 @@ int ParserArgs::handleClient()
     }
     if (utilities::Check::strIsEqual("udp", type)) {
         this->clt_udp = new sk::Skaldi<sk::client::UDP, sk::server::UDP>(_av[3], _av[4]);
+        this->clt_udp->client->setDebugging(true);
+        this->clt_udp->client->setFirstConnection(true);
+        this->clt_udp->client->firstConnection<void, ...int>(test, 1);/
+        this->clt_udp->client->receive();
         this->clt_udp->client->getInput();
         this->clt_udp->run();
         return (0);
