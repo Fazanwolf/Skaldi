@@ -87,8 +87,6 @@ namespace sk::client {
             const std::string message(_buffer.data(), _buffer.data() + bytesTransferred);
             if (_debugging)
                 spdlog::info("Server send: {}", message);
-            else
-                std::cout << message << std::endl;
             return this->receive();
         }
     }
