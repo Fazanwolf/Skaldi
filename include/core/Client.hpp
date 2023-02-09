@@ -3,6 +3,7 @@
 
 #include "core/client_type/TCP.hpp"
 #include "core/client_type/UDP.hpp"
+#include <functional>
 
 namespace sk {
 
@@ -25,7 +26,7 @@ namespace sk {
         Client(boost::asio::io_service &ioService, const std::string &host, const std::string &port)
         {
             _client = new ClientType(ioService, host, port);
-        }
+        };
 
         /**
          * @brief Destructor of the client
@@ -36,7 +37,7 @@ namespace sk {
         {
             if (_client != nullptr)
                 delete _client;
-        }
+        };
 
         /**
          * @brief Get the input of the user
@@ -46,7 +47,7 @@ namespace sk {
         void getInput() override
         {
             _client->getInput();
-        }
+        };
 
         /**
          * @brief Send a message to the server
@@ -57,7 +58,7 @@ namespace sk {
         void send(const std::string &message) override
         {
             _client->send(message);
-        }
+        };
 
         /**
          * @brief Send a message to the server
@@ -67,7 +68,31 @@ namespace sk {
         void receive() override
         {
             _client->receive();
-        }
+        };
+        void setDebugging(bool isDebugging) override
+        {
+            _client->setDebugging(isDebugging);
+        };
+        /**
+         * @brief Enable or disable the first connection function
+         * @details Enable or disable the first function passed as parameter when the client is connected to the server for the first time
+         * @param isExecuted
+         * @return void
+         */
+        void setFirstConnection(bool isExecuted) override
+        {
+            _client->setFirstConnection(isExecuted);
+        };
+        /**
+         * @brief First connection into the server
+         * @details Do the function passed as parameter when the client is connected to the server for the first time
+         * @param data
+         * @return void
+         */
+        void firstConnection(const std::string &data)
+        {
+            _client->firstConnection(data);
+        };
 
     protected:
         /**
@@ -80,7 +105,7 @@ namespace sk {
         void handleSend(const boost::system::error_code &error, const std::string &message) override
         {
             _client->handleSend(error, message);
-        }
+        };
 
         /**
          * @brief Handle received messages
@@ -91,7 +116,7 @@ namespace sk {
         void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) override
         {
             _client->handleReceive(error, bytesTransferred);
-        }
+        };
 
     private:
         /**

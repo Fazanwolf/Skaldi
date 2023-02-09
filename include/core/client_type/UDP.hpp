@@ -3,6 +3,7 @@
 
 #include "spdlog/spdlog.h"
 #include "core/IClient.hpp"
+#include <functional>
 
 namespace sk::client {
 
@@ -51,6 +52,29 @@ namespace sk::client {
          * @return void
          */
         void receive() override;
+        /**
+         * @brief Enable or disable the debugging mode
+         * @details Enable or disable the debugging mode
+         * @param isDebugging
+         * @return void
+         */
+        void setDebugging(bool isDebugging) override;
+        /**
+         * @brief Enable or disable the first connection function
+         * @details Enable or disable the first function passed as parameter when the client is connected to the server for the first time
+         * @param isExecuted
+         * @return void
+         */
+        void setFirstConnection(bool isExecuted) override;
+        /**
+         * @brief First connection into the server
+         * @details Do the function passed as parameter when the client is connected to the server for the first time
+         * @param data
+         */
+        void firstConnection(const std::string &data)
+        {
+            if (_isExecuted) this->send(data);
+        };
 
         /**
          * @brief Handle sent messages
@@ -91,6 +115,8 @@ namespace sk::client {
          * @details A buffer to store the messages received
          */
         boost::array<char, 1024> _buffer {};
+        bool _isExecuted = false;
+        bool _debugging = false;
     };
 }
 

@@ -7,6 +7,7 @@
 #include "boost/array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <thread>
+#include <functional>
 
 /**
  * @brief Skaldi namespace
@@ -38,6 +39,19 @@ namespace sk {
              * @return Message received
              */
             virtual void receive() = 0;
+            /**
+             * @brief Enable or disable debugging mode
+             * @details If debugging mode is enabled, the client will print the messages it sends and receives
+             * @param debug
+             * @return void
+             */
+            virtual void setDebugging(bool debug) = 0;
+            /**
+             * @brief Set the first connection
+             * @details Set the first connection
+             * @param fc
+             */
+            virtual void setFirstConnection(bool fc) = 0;
 
         protected:
             /**
