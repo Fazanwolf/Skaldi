@@ -52,6 +52,12 @@ namespace sk {
              * @param fc
              */
             virtual void setFirstConnection(bool fc) = 0;
+            /**
+             * @brief Get buffer of the client
+             * @details Get buffer of the client
+             * @return Buffer of the client
+             */
+            virtual std::string getBuffer() = 0;
 
         protected:
             /**

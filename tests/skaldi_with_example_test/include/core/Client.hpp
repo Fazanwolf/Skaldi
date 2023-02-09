@@ -93,6 +93,15 @@ namespace sk {
         {
             _client->firstConnection(data);
         };
+        /**
+         * @brief Get buffer of the client
+         * @details Get buffer of the client
+         * @return Buffer of the client
+         */
+        std::string getBuffer() override
+        {
+            return _client->getBuffer();
+        };
 
     protected:
         /**

@@ -51,6 +51,11 @@ namespace sk::client {
         _isExecuted = isExecuted;
     };
 
+    std::string TCP::getBuffer()
+    {
+        return std::string(_buffer.data());
+    };
+
     void TCP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
     {
     }

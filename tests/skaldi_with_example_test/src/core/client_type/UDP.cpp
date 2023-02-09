@@ -76,6 +76,11 @@ namespace sk::client {
         }
     }
 
+    std::string UDP::getBuffer()
+    {
+        return std::string(_buffer.data());
+    };
+
     void UDP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
     {
         if (!error || error == boost::asio::error::message_size) {
