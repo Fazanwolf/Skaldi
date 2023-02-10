@@ -131,9 +131,25 @@ int ParserArgs::handleClient()
         this->clt_udp->client->setDebugging(false);
         this->clt_udp->client->setFirstConnection(true);
         this->clt_udp->client->firstConnection("?");
-        this->clt_udp->client->receive();
-//        std::string msg = this->clt_udp->client->getBuffer();
-//        std::cout << "variable: " << msg << std::endl;
+
+        std::thread t([&]() {
+            while (true) {
+                std::string msg = this->clt_udp->client->getBuffer();
+                if (!msg.empty()) std::cout << "Receive: " << msg << std::endl;
+                /* Use that code when you want to send data every X seconds */
+//                boost::asio::io_context io;
+//                boost::asio::deadline_timer t(io, boost::posix_time::seconds(5));
+//                t.async_wait([&](const boost::system::error_code &ec) {
+//                    if (ec) {
+//                        std::cout << "error: " << ec.message() << std::endl;
+//                    } else {
+//                        this->clt_udp->client->send("test");
+//                    }
+//                });
+//                io.run();
+            }
+        });
+        t.detach();
 //        this->clt_udp->client->getInput();
         this->clt_udp->run();
         return (0);

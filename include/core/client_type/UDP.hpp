@@ -71,10 +71,7 @@ namespace sk::client {
          * @details Do the function passed as parameter when the client is connected to the server for the first time
          * @param data
          */
-        void firstConnection(const std::string &data)
-        {
-            if (_isExecuted) this->send(data);
-        };
+        void firstConnection(const std::string &data);
         /**
          * @brief Get buffer of the client
          * @details Get buffer of the client

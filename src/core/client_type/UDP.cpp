@@ -68,24 +68,31 @@ namespace sk::client {
         _isExecuted = isExecuted;
     };
 
+    void UDP::firstConnection(const std::string &data)
+    {
+        if (_isExecuted) this->send(data);
+    };
+
     void UDP::handleSend(const boost::system::error_code &error, const std::string &message)
     {
         if (!error) {
-            if (_debugging) spdlog::info("Data send: {}", message);
+            if (_debugging) spdlog::info("[SEND] {}", message);
             return this->receive();
         }
     }
 
     std::string UDP::getBuffer()
     {
-        return std::string(_buffer.data());
+        std::string data = _buffer.data();
+        _buffer.fill('\0');
+        return data;
     };
 
     void UDP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
     {
         if (!error || error == boost::asio::error::message_size) {
             const std::string message(_buffer.data(), _buffer.data() + bytesTransferred);
-            if (_debugging) spdlog::info("Server send: {}", message);
+            if (_debugging) spdlog::info("[RECEIVE] {}", message);
             return this->receive();
         }
     }

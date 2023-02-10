@@ -60,6 +60,11 @@ namespace sk {
                 delete server;
         }
 
+        boost::asio::io_context &getIoContext()
+        {
+            return _ioContext;
+        }
+
         void run()
         {
             _ioContext.run();
