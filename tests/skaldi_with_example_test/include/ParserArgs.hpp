@@ -55,14 +55,8 @@ private:
     int _ac;
     char **_av;
 
-    sk::Skaldi<sk::client::TCP, sk::server::TCP> *tcp;
-    sk::Skaldi<sk::client::UDP, sk::server::UDP> *udp;
-
-    sk::Skaldi<sk::client::TCP, sk::server::TCP> *clt_tcp;
-    sk::Skaldi<sk::client::UDP, sk::server::UDP> *clt_udp;
-
-    sk::Skaldi<sk::client::TCP, sk::server::TCP> *srv_tcp;
-    sk::Skaldi<sk::client::UDP, sk::server::UDP> *srv_udp;
+    sk::Skaldi<InternetProtocol::UDP> udp;
+    sk::Skaldi<InternetProtocol::TCP> tcp;
 };
 
 #endif //PARSER_ARGS_HPP

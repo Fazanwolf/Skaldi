@@ -4,27 +4,28 @@
 #include <spdlog/spdlog.h>
 #include "core/Server.hpp"
 #include "core/Client.hpp"
+#include "core/Type.hpp"
 
 namespace sk {
 
     /**
      * @brief Class Skaldi that will be used to create a client or a server
-     * @tparam ClientType
-     * @tparam ServerType
      */
-    template<typename ClientType, typename ServerType>
+    template <type::InternetProtocol T>
     class Skaldi {
     public:
+
         /**
          * @brief Constructor of Skaldi
-         * @details Constructor of Skaldi that will create a client and a server
-         * @param host
+         * @details Constructor of Skaldi that will create a server
          * @param port
          */
-        Skaldi(const std::string &host, unsigned short port)
+        Skaldi(unsigned short port = 5000)
         {
-            client = new Client<ClientType>(_ioContext, host, std::to_string(port));
-            server = new Server<ServerType>(_ioContext, port);
+            if (T == type::InternetProtocol::TCP)
+                server = Server<type::Server::TCP>(_ioContext, port);
+            if (T == type::InternetProtocol::UDP)
+                server = Server<type::Server::UDP>(_ioContext, port);
         }
 
         /**
@@ -35,18 +36,12 @@ namespace sk {
          */
         Skaldi(const std::string &host, const std::string &port)
         {
-            client = new Client<ClientType>(_ioContext, host, port);
+            if (T == InternetProtocol::TCP)
+                client = Client<type::Client::TCP>(_ioContext, host, port);
+            if (T == InternetProtocol::UDP)
+                client = Client<type::Client::UDP>(_ioContext, host, port);
         }
 
-        /**
-         * @brief Constructor of Skaldi
-         * @details Constructor of Skaldi that will create a server
-         * @param port
-         */
-        explicit Skaldi(unsigned short port)
-        {
-            server = new Server<ServerType>(_ioContext, port);
-        }
 
         /**
          * @brief Destructor of Skaldi
@@ -54,10 +49,6 @@ namespace sk {
          */
         ~Skaldi()
         {
-            if (client != nullptr)
-                delete client;
-            if (server != nullptr)
-                delete server;
         }
 
         boost::asio::io_context &getIoContext()
@@ -85,8 +76,9 @@ namespace sk {
             _ioContext.poll();
         }
 
-        Client<ClientType> *client;
-        Server<ServerType> *server;
+//        NetworkType<InternetProtocol> *g;
+        Client<ClientType> client;
+        Server<ServerType> server;
 
     private:
         boost::asio::io_context _ioContext;

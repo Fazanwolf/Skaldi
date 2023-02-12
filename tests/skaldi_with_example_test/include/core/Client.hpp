@@ -1,8 +1,7 @@
 #ifndef SKALDI_CLIENT_HPP
 #define SKALDI_CLIENT_HPP
 
-#include "core/client_type/TCP.hpp"
-#include "core/client_type/UDP.hpp"
+#include "core/Type.hpp"
 #include <functional>
 
 namespace sk {
@@ -12,7 +11,7 @@ namespace sk {
      * @details Class Client that will be used to send and receive messages
      * @tparam ClientType UDP or TCP
      */
-    template<typename ClientType>
+    template<type::Client T>
     class Client : public IClient {
     public:
         /**
@@ -25,7 +24,7 @@ namespace sk {
          */
         Client(boost::asio::io_context &ioContext, const std::string &host, const std::string &port)
         {
-            _client = new ClientType(ioContext, host, port);
+            _client = T(ioContext, host, port);
         };
 
         /**
@@ -46,7 +45,7 @@ namespace sk {
          */
         void getInput() override
         {
-            _client->getInput();
+            _client.getInput();
         };
 
         /**
@@ -57,7 +56,7 @@ namespace sk {
          */
         void send(const std::string &message) override
         {
-            _client->send(message);
+            _client.send(message);
         };
 
         /**
@@ -67,11 +66,11 @@ namespace sk {
          */
         void receive() override
         {
-            _client->receive();
+            _client.receive();
         };
         void setDebugging(bool isDebugging) override
         {
-            _client->setDebugging(isDebugging);
+            _client.setDebugging(isDebugging);
         };
         /**
          * @brief Enable or disable the first connection function
@@ -81,7 +80,7 @@ namespace sk {
          */
         void setFirstConnection(bool isExecuted) override
         {
-            _client->setFirstConnection(isExecuted);
+            _client.setFirstConnection(isExecuted);
         };
         /**
          * @brief First connection into the server
@@ -91,7 +90,7 @@ namespace sk {
          */
         void firstConnection(const std::string &data)
         {
-            _client->firstConnection(data);
+            _client.firstConnection(data);
         };
         /**
          * @brief Get buffer of the client
@@ -100,7 +99,7 @@ namespace sk {
          */
         std::string getBuffer() override
         {
-            return _client->getBuffer();
+            return _client.getBuffer();
         };
 
     protected:
@@ -113,7 +112,7 @@ namespace sk {
          */
         void handleSend(const boost::system::error_code &error, const std::string &message) override
         {
-            _client->handleSend(error, message);
+            _client.handleSend(error, message);
         };
 
         /**
@@ -124,7 +123,7 @@ namespace sk {
          */
         void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) override
         {
-            _client->handleReceive(error, bytesTransferred);
+            _client.handleReceive(error, bytesTransferred);
         };
 
     private:
@@ -132,7 +131,7 @@ namespace sk {
          * @brief Instance of the client
          * @details Instance of the client that will be used to send and receive messages
          */
-        ClientType *_client;
+        T _client;
     };
 }
 

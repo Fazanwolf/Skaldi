@@ -1,17 +1,16 @@
 #ifndef SKALDI_SERVER_HPP
 #define SKALDI_SERVER_HPP
 
-#include "core/server_type/UDP.hpp"
-#include "core/server_type/TCP.hpp"
+#include "core/Type.hpp"
 
 namespace sk {
 
-    template <typename ServerType>
+    template <type::Server T>
     class Server : public IServer {
     public:
         Server(boost::asio::io_context &ioContext, unsigned short port)
         {
-            _server = new ServerType(ioContext, port);
+            _server = T(ioContext, port);
         }
 
         virtual ~Server() override
@@ -22,42 +21,42 @@ namespace sk {
 
         void send(const std::string &message, boost::asio::ip::udp::endpoint &endpoint)
         {
-            _server->send(message, endpoint);
+            _server.send(message, endpoint);
         }
 
         void sendToEveryone(const std::string &message) override
         {
-            _server->sendToEveryone(message);
+            _server.sendToEveryone(message);
         }
 
         void getInput() override
         {
-            _server->getInput();
+            _server.getInput();
         }
 
         void setBroadcasting(bool able) override
         {
-            _server->setBroadcasting(able);
+            _server.setBroadcasting(able);
         }
 
     protected:
         void broadcast(const int &id, const std::string &message) override
         {
-            _server->broadcast(id, message);
+            _server.broadcast(id, message);
         }
 
         void receive() override
         {
-            _server->receive();
+            _server.receive();
         }
 
         void handleReceive(const boost::system::error_code &error, std::size_t byesTransferred) override
         {
-            _server->handleReceive(error, byesTransferred);
+            _server.handleReceive(error, byesTransferred);
         }
 
     private:
-        ServerType *_server;
+        T _server;
     };
 
 }
