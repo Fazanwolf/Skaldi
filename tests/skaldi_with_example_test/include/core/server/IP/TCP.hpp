@@ -2,7 +2,7 @@
 #define SKALDI_TCP_SERVER_HPP
 
 #include "spdlog/spdlog.h"
-#include "core/IServer.hpp"
+#include "core/server/IServer.hpp"
 
 /**
  * @brief

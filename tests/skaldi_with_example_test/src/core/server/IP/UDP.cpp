@@ -1,4 +1,4 @@
-#include "core/server_type/UDP.hpp"
+#include "core/server/IP/UDP.hpp"
 
 namespace sk::server {
 
@@ -31,7 +31,7 @@ namespace sk::server {
 
     void UDP::send(const std::string &message, boost::asio::ip::udp::endpoint &endpoint)
     {
-        _socket.async_send_to(boost::asio::buffer(message), endpoint,
+        _socket.async_send_to(boost::asio::buffer(message, message.size()), endpoint,
                               boost::bind(&UDP::handleSend, this, boost::asio::placeholders::error, endpoint, message)
         );
     }
@@ -77,18 +77,15 @@ namespace sk::server {
             // Add the client endpoint to the map if it doesn't exist
             if (_clients.find(_remoteEndpoint) == _clients.end()) {
                 _clients[_remoteEndpoint] = _nbClient;
-                send(std::to_string(_clients[_remoteEndpoint]), _remoteEndpoint);
                 spdlog::info("First connection of {}",  _clients[_remoteEndpoint]);
+                send(std::to_string(_clients[_remoteEndpoint]), _remoteEndpoint);
                 _nbClient++;
+                return receive();
             }
 
             // Print the message received and the name of the client
             if (!error || error == boost::asio::error::message_size) {
                 this->broadcast(_clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
-//                if (bytes_transferred <= 3) {
-//                    spdlog::info("Bitset received from {}: {}", _clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
-//                    return receive();
-//                }
                 spdlog::info("Data received from {}: {}", _clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
                 return receive();
             }

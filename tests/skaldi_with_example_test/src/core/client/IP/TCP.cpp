@@ -1,4 +1,4 @@
-#include "core/client_type/TCP.hpp"
+#include "core/client/IP/TCP.hpp"
 
 namespace sk::client {
 

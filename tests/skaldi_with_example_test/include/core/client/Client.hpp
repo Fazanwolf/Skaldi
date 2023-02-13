@@ -1,8 +1,9 @@
 #ifndef SKALDI_CLIENT_HPP
 #define SKALDI_CLIENT_HPP
 
-#include "core/Type.hpp"
-#include <functional>
+#include "core/client/IClient.hpp"
+#include "core/client/IP/TCP.hpp"
+#include "core/client/IP/UDP.hpp"
 
 namespace sk {
 
@@ -11,7 +12,7 @@ namespace sk {
      * @details Class Client that will be used to send and receive messages
      * @tparam ClientType UDP or TCP
      */
-    template<type::Client T>
+    template<typename T>
     class Client : public IClient {
     public:
         /**
@@ -22,9 +23,9 @@ namespace sk {
          * @param host IP address of the server
          * @param port Port of the server
          */
-        Client(boost::asio::io_context &ioContext, const std::string &host, const std::string &port)
+        Client(const std::string &host, const std::string &port)
         {
-            _client = T(ioContext, host, port);
+            _client = new T(_ioContext, host, port);
         };
 
         /**
@@ -32,10 +33,9 @@ namespace sk {
          * @details Destructor of the client that will close the socket
          * @return void
          */
-        virtual ~Client() override
+        ~Client() override
         {
-            if (_client != nullptr)
-                delete _client;
+            delete _client;
         };
 
         /**
@@ -45,7 +45,7 @@ namespace sk {
          */
         void getInput() override
         {
-            _client.getInput();
+            _client->getInput();
         };
 
         /**
@@ -56,7 +56,7 @@ namespace sk {
          */
         void send(const std::string &message) override
         {
-            _client.send(message);
+            _client->send(message);
         };
 
         /**
@@ -66,11 +66,11 @@ namespace sk {
          */
         void receive() override
         {
-            _client.receive();
+            _client->receive();
         };
         void setDebugging(bool isDebugging) override
         {
-            _client.setDebugging(isDebugging);
+            _client->setDebugging(isDebugging);
         };
         /**
          * @brief Enable or disable the first connection function
@@ -80,7 +80,7 @@ namespace sk {
          */
         void setFirstConnection(bool isExecuted) override
         {
-            _client.setFirstConnection(isExecuted);
+            _client->setFirstConnection(isExecuted);
         };
         /**
          * @brief First connection into the server
@@ -90,7 +90,7 @@ namespace sk {
          */
         void firstConnection(const std::string &data)
         {
-            _client.firstConnection(data);
+            _client->firstConnection(data);
         };
         /**
          * @brief Get buffer of the client
@@ -99,8 +99,33 @@ namespace sk {
          */
         std::string getBuffer() override
         {
-            return _client.getBuffer();
+            return _client->getBuffer();
         };
+
+        boost::asio::io_context &getIoContext()
+        {
+            return _ioContext;
+        }
+
+        void run()
+        {
+            _ioContext.run();
+        }
+
+        void runOne()
+        {
+            _ioContext.run_one();
+        }
+
+        void pollOne()
+        {
+            _ioContext.poll_one();
+        }
+
+        void poll()
+        {
+            _ioContext.poll();
+        }
 
     protected:
         /**
@@ -112,7 +137,7 @@ namespace sk {
          */
         void handleSend(const boost::system::error_code &error, const std::string &message) override
         {
-            _client.handleSend(error, message);
+            _client->handleSend(error, message);
         };
 
         /**
@@ -123,15 +148,16 @@ namespace sk {
          */
         void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) override
         {
-            _client.handleReceive(error, bytesTransferred);
+            _client->handleReceive(error, bytesTransferred);
         };
 
     private:
+        boost::asio::io_context _ioContext;
         /**
          * @brief Instance of the client
          * @details Instance of the client that will be used to send and receive messages
          */
-        T _client;
+        T *_client;
     };
 }
 

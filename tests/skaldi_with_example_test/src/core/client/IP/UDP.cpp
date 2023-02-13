@@ -1,4 +1,4 @@
-#include "core/client_type/UDP.hpp"
+#include "core/client/IP/UDP.hpp"
 
 namespace sk::client {
 
@@ -91,8 +91,7 @@ namespace sk::client {
     void UDP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
     {
         if (!error || error == boost::asio::error::message_size) {
-            const std::string message(_buffer.data(), _buffer.data() + bytesTransferred);
-            if (_debugging) spdlog::info("[RECEIVE] {}", message);
+            if (_debugging) spdlog::info("[RECEIVE] {}", _buffer.data());
             return this->receive();
         }
     }

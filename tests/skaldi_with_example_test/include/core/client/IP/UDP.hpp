@@ -2,7 +2,7 @@
 #define SKALDI_UDP_CLIENT_HPP
 
 #include "spdlog/spdlog.h"
-#include "core/IClient.hpp"
+#include "core/client/IClient.hpp"
 #include <functional>
 
 namespace sk::client {

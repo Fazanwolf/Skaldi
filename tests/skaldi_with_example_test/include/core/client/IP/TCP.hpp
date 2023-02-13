@@ -2,7 +2,7 @@
 #define SKALDI_TCP_CLIENT_HPP
 
 #include "spdlog/spdlog.h"
-#include "core/IClient.hpp"
+#include "core/client/IClient.hpp"
 #include <iostream>
 
 namespace sk::client {

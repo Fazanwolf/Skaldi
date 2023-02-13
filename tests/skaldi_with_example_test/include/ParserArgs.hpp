@@ -39,7 +39,7 @@
 class ParserArgs {
 public:
     explicit ParserArgs(int ac = 1, char **av = nullptr);
-    ~ParserArgs();
+    virtual ~ParserArgs() = default;
     int handler();
 
 protected:
@@ -55,8 +55,10 @@ private:
     int _ac;
     char **_av;
 
-    sk::Skaldi<InternetProtocol::UDP> udp;
-    sk::Skaldi<InternetProtocol::TCP> tcp;
+    sk::Client<sk::client::TCP> *_cltTcp;
+    sk::Client<sk::client::UDP> *_cltUdp;
+    sk::Server<sk::server::UDP> *_srvUdp;
+    sk::Server<sk::server::TCP> *_srvTcp;
 };
 
 #endif //PARSER_ARGS_HPP

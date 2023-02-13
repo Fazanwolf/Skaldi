@@ -5,10 +5,12 @@
 if [[ "$1" == "test_to_release" ]]; then
   ## Update CPP files
   cp -r src/core ../../src/
+  cp -r src/protocol ../../src/
 
   ## Update Header files
   cp include/Skaldi.hpp ../../include/Skaldi.hpp
   cp -r include/core ../../include/
+  cp -r include/protocol ../../include/
 
   # Update example with the latest tested version of Skaldi
 
@@ -23,10 +25,12 @@ if [[ "$1" == "test_to_release" ]]; then
 elif [[ "$1" == "release_to_test" ]]; then
   ## Update CPP files
   cp -r ../../src/core src/
+    cp -r ../../src/protocol include/
 
   ## Update Header files
   cp ../../include/Skaldi.hpp include/Skaldi.hpp
   cp -r ../../include/core include/
+  cp -r ../../include/protocol include/
 
   # Update example with the latest tested version of Skaldi
 

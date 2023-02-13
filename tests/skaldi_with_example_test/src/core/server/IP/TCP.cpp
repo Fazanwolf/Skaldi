@@ -1,4 +1,4 @@
-#include "core/server_type/TCP.hpp"
+#include "core/server/IP/TCP.hpp"
 
 namespace sk::server {
 
