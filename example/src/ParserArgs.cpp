@@ -11,10 +11,8 @@ ParserArgs::ParserArgs(int ac, char **av)
     this->_ac = ac;
     this->_av = av;
 
-    this->_cltTcp = nullptr;
-    this->_cltUdp = nullptr;
-    this->_srvTcp = nullptr;
-    this->_srvUdp = nullptr;
+    _cltUdp = nullptr;
+    _srvUdp = nullptr;
 }
 
 
@@ -65,16 +63,16 @@ int ParserArgs::handleServer()
     utilities::Transform::toUpper(type);
     const unsigned short port = static_cast<unsigned short>(std::stoi(_av[3]));
 
-    if (utilities::Check::strIsEqual("TCP", type)) {
-        this->_srvTcp = new sk::Server<sk::server::TCP>(port);
-        this->_srvTcp->setBroadcasting(true);
-        this->_srvTcp->getInput();
-        this->_srvTcp->run();
-        return (0);
-    }
+//    if (utilities::Check::strIsEqual("TCP", type)) {
+//        this->_srvTcp = sk::Server<sk::server::TCP>(port);
+//        this->_srvTcp.setBroadcasting(true);
+//        this->_srvTcp.getInput();
+//        this->_srvTcp.run();
+//        return (0);
+//    }
 
-    if (utilities::Check::strIsEqual("UDP", type)) {
-        this->_srvUdp = new sk::Server<sk::server::UDP>(port);
+    if (std::string("UDP") == type) {
+        this->_srvUdp = std::make_unique<sk::Server<sk::server::UDP>>(port);
         this->_srvUdp->setBroadcasting(true);
         this->_srvUdp->getInput();
         this->_srvUdp->run();
@@ -96,39 +94,28 @@ int ParserArgs::handleClient()
     std::string type = std::string(_av[2]);
     utilities::Transform::toUpper(type);
 
-    if (utilities::Check::strIsEqual("TCP", type)) {
-        this->_cltTcp = new sk::Client<sk::client::TCP>(_av[3], _av[4]);
-        this->_cltTcp->getInput();
-        this->_cltTcp->run();
-        return (0);
-    }
-    if (utilities::Check::strIsEqual("UDP", type)) {
-        this->_cltUdp = new sk::Client<sk::client::UDP>(_av[3], _av[4]);
+//    if (utilities::Check::strIsEqual("TCP", type)) {
+//        this->_cltTcp = sk::Client<sk::client::TCP>(_av[3], _av[4]);
+//        this->_cltTcp.getInput();
+//        this->_cltTcp.run();
+//        return (0);
+//    }
+    if ("UDP" == type) {
+        this->_cltUdp = std::make_unique<sk::Client<sk::client::UDP>>(_av[3], _av[4]);
         this->_cltUdp->setDebugging(false);
-        this->_cltUdp->setFirstConnection(true);
-        this->_cltUdp->firstConnection("?");
+        this->_cltUdp->receive();
+        this->_cltUdp->connect("?");
 
         std::thread t([&]() {
-            while (true) {
-                std::string msg = this->_cltUdp->getBuffer();
-                if (!msg.empty()) std::cout << "Receive: " << msg << std::endl;
-                /* Use that code when you want to send data every X seconds */
-//                boost::asio::io_context io;
-//                boost::asio::deadline_timer t(io, boost::posix_time::seconds(5));
-//                t.async_wait([&](const boost::system::error_code &ec) {
-//                    if (ec) {
-//                        std::cout << "error: " << ec.message() << std::endl;
-//                    } else {
-//                        this.udp->client->send("test");
-//                    }
-//                });
-//                io.run();
-            }
+            this->_cltUdp->run();
         });
         t.detach();
-//        this.udp->client->getInput();
-        this->_cltUdp->run();
-        return (0);
+
+        while (true) {
+            std::string msg = this->_cltUdp->getBuffer();
+            if (!msg.empty()) std::cout << "Receive: " << msg << std::endl;
+            msg = "";
+        }
     }
     return this->invalidArgs();
 }
@@ -156,9 +143,9 @@ int ParserArgs::handler()
 {
     if (_ac == 2)
         return this->basicArgs();
-    if (_ac == 4 && utilities::Check::strIsEqual("server", _av[1]))
+    if (_ac == 4 && std::string("server") == _av[1])
         return this->handleServer();
-    if (_ac == 5 && utilities::Check::strIsEqual("client", _av[1]))
+    if (_ac == 5 && std::string("client") == _av[1])
         return this->handleClient();
     return this->invalidArgs();
 }
