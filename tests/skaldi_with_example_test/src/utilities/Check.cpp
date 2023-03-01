@@ -21,14 +21,7 @@ namespace utilities {
 
     bool Check::isAlias(const std::string &target, const std::string &flag, const std::string &alias)
     {
-        if (std::strcmp(target.c_str(), flag.c_str()) == 0 || std::strcmp(target.c_str(), alias.c_str()) == 0)
-            return true;
-        return false;
-    }
-
-    bool Check::strIsEqual(const std::string &src, const std::string &target)
-    {
-        if (std::strcmp(src.c_str(), target.c_str()) == 0)
+        if (target == flag || target == alias)
             return true;
         return false;
     }

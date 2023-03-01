@@ -99,6 +99,7 @@ namespace sk::server {
     {
         if (!error) {
             spdlog::info("Data send to {}: {}", _clients[endpoint], message);
+            return;
         }
     }
 

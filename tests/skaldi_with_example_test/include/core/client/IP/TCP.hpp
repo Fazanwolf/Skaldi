@@ -20,7 +20,7 @@ namespace sk::client {
          * @param host
          * @param port
          */
-        TCP(boost::asio::io_context &ioContext, const std::string &host, const std::string &port);
+        TCP(std::shared_ptr<boost::asio::io_context> ioContext, const std::string &host, const std::string &port);
         /**
          * @brief Destructor of the TCP client
          * @details Destructor of the TCP client that will close the socket
@@ -61,33 +61,13 @@ namespace sk::client {
          */
         void setDebugging(bool isDebugging) override;
         /**
-         * @brief Set the first connection
-         * @details Set the first connection
-         * @param isExecuted
-         * @return void
-         */
-        void setFirstConnection(bool isExecuted) override;
-        /**
          * @brief Get the buffer
          * @details Get the buffer
          * @return std::string
          */
         std::string getBuffer() override;
 
-        /**
-         * @brief First connection into the server
-         * @details Do the function passed as parameter when the client is connected to the server for the first time
-         * @tparam R
-         * @tparam Args
-         * @param func
-         * @param args
-         */
-        template<typename R, typename... Args>
-        void firstConnection(std::function<R(Args...)> func, Args... args)
-        {
-            if (_isExecuted)
-                func(args...);
-        };
+    protected:
         /**
          * @brief Handle sent messages
          * @details Handle sent messages
@@ -95,7 +75,7 @@ namespace sk::client {
          * @param message
          * @return void
          */
-        void handleSend(const boost::system::error_code &error, const std::string &message) override;
+        void handleSend(const boost::system::error_code &error, const std::string &message);
         /**
          * @brief Handle received messages
          * @details Handle received messages
@@ -103,8 +83,7 @@ namespace sk::client {
          * @param len
          * @return void
          */
-        void handleReceive(const boost::system::error_code &error, size_t len) override;
-    protected:
+        void handleReceive(const boost::system::error_code &error);
 
     private:
         /**
@@ -118,7 +97,6 @@ namespace sk::client {
          */
         boost::array<char, 1024> _buffer {};
         bool _isDebugging = false;
-        bool _isExecuted = false;
     };
 }
 

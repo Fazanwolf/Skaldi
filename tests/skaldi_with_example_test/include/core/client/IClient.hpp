@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "boost/asio.hpp"
-#include "boost/bind.hpp"
+#include "boost/bind/bind.hpp"
 #include "boost/array.hpp"
 #include "boost/shared_ptr.hpp"
 #include <thread>
@@ -47,12 +47,6 @@ namespace sk {
              */
             virtual void setDebugging(bool debug) = 0;
             /**
-             * @brief Set the first connection
-             * @details Set the first connection
-             * @param fc
-             */
-            virtual void setFirstConnection(bool fc) = 0;
-            /**
              * @brief Get buffer of the client
              * @details Get buffer of the client
              * @return Buffer of the client
@@ -60,18 +54,6 @@ namespace sk {
             virtual std::string getBuffer() = 0;
 
         protected:
-            /**
-             * @brief Handle the sending of a message
-             * @param error Error code
-             * @param message Message to send
-             */
-            virtual void handleSend(const boost::system::error_code &error, const std::string &message) = 0;
-            /**
-             * @brief Handle the reception of a message
-             * @param error Error code
-             * @param bytesTransferred Number of bytes transferred
-             */
-            virtual void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) = 0;
     };
 
 };

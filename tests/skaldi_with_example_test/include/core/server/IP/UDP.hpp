@@ -60,19 +60,20 @@ namespace sk::server {
             void setBroadcasting(bool able) override;
 
             /**
+             * @brief Receive a message from clients
+             * @details Receive a message from clients
+             * @return void
+             */
+            void receive() override;
+        protected:
+            /**
              * @brief Broadcast a message to everyone
              * @details Broadcast a message to everyone using an instance of the server
              * @param id
              * @param message
              * @return void
              */
-            void broadcast(const int &id, const std::string &message) override;
-            /**
-             * @brief Receive a message from clients
-             * @details Receive a message from clients using an instance of the server
-             * @return void
-             */
-            void receive() override;
+            void broadcast(const int &id, const std::string &message);
             /**
              * @brief Handle the reception of a message
              * @details Handle the reception of a message using an instance of the server
@@ -80,7 +81,7 @@ namespace sk::server {
              * @param bytesTransferred
              * @return void
              */
-            void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) override;
+            void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred);
             /**
              * @brief Handle the sending of a message
              * @details Handle the sending of a message using an instance of the server
@@ -90,7 +91,6 @@ namespace sk::server {
              * @return void
              */
             void handleSend(const boost::system::error_code &error, boost::asio::ip::udp::endpoint &endpoint, const std::string &message);
-        protected:
 
         private:
             /**

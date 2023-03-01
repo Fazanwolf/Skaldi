@@ -38,22 +38,21 @@ namespace sk::client {
         );
     }
 
-    void UDP::send(UDP *clt, const std::string &message)
-    {
-        clt->_socket.async_send_to(boost::asio::buffer(message), clt->_remoteEndpoint,
-                              boost::bind(&UDP::handleSend, clt,
-                                          boost::asio::placeholders::error,
-                                          message
-                              )
-        );
-    }
+//    void UDP::send(UDP *clt, const std::string &message)
+//    {
+//        clt->_socket.async_send_to(boost::asio::buffer(message), clt->_remoteEndpoint,
+//                              boost::bind(&UDP::handleSend, clt,
+//                                          boost::asio::placeholders::error,
+//                                          message
+//                              )
+//        );
+//    }
 
     void UDP::receive()
     {
         _socket.async_receive_from(boost::asio::buffer(_buffer), _remoteEndpoint,
                                    boost::bind(&UDP::handleReceive, this,
-                                               boost::asio::placeholders::error,
-                                               boost::asio::placeholders::bytes_transferred
+                                               boost::asio::placeholders::error
                                    )
         );
     }
@@ -63,37 +62,40 @@ namespace sk::client {
         _debugging = isDebugging;
     };
 
-    void UDP::setFirstConnection(bool isExecuted)
+
+    void UDP::connect(const std::string &data)
     {
-        _isExecuted = isExecuted;
+        this->send(data);
     };
 
-    void UDP::firstConnection(const std::string &data)
-    {
-        if (_isExecuted) this->send(data);
-    };
-
-    void UDP::handleSend(const boost::system::error_code &error, const std::string &message)
+    void UDP::handleSend(const boost::system::error_code &error, const std::string &message) const
     {
         if (!error) {
             if (_debugging) spdlog::info("[SEND] {}", message);
-            return this->receive();
         }
     }
 
     std::string UDP::getBuffer()
     {
-        std::string data = _buffer.data();
-        _buffer.fill('\0');
-        return data;
+        if (!_queueOfActions.empty()) {
+            std::string data = _queueOfActions.front();
+            std::cout << data << std::endl;
+            _queueOfActions.pop();
+            return data;
+        }
     };
 
-    void UDP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
+    void UDP::handleReceive(const boost::system::error_code &error)
     {
         if (!error || error == boost::asio::error::message_size) {
-            if (_debugging) spdlog::info("[RECEIVE] {}", _buffer.data());
+            if (_buffer.data()[0] != '\0') {
+                if (_debugging) spdlog::info("[RECEIVE] {}", _buffer.data());
+                this->_queueOfActions.push(_buffer.data());
+                _buffer.fill('\0');
+            }
             return this->receive();
         }
+        spdlog::error("Error sending data: {}", error.message());
     }
 
 }

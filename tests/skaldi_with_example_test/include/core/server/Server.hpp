@@ -10,15 +10,19 @@ namespace sk {
     template <typename T>
     class Server : public IServer {
     public:
+
+        Server()
+        {
+            _server = nullptr;
+        }
+
         explicit Server(unsigned short port)
         {
-            _server = new T(_ioContext, port);
+            _server = std::make_shared<T>(_ioContext, port);
         }
 
         virtual ~Server() override
         {
-            if (_server != nullptr)
-                delete _server;
         }
 
         void send(const std::string &message, boost::asio::ip::udp::endpoint &endpoint)
@@ -41,9 +45,9 @@ namespace sk {
             _server->setBroadcasting(able);
         }
 
-        boost::asio::io_context &getIoContext()
+        void receive() override
         {
-            return _ioContext;
+            _server->receive();
         }
 
         void run()
@@ -66,26 +70,18 @@ namespace sk {
             _ioContext.poll();
         }
 
+        Server &operator=(Server other)
+        {
+            if (!other._ioContext.stopped())
+                other._ioContext.stop();
+            _server = other._server;
+            return *this;
+        }
+
     protected:
-        void broadcast(const int &id, const std::string &message) override
-        {
-            _server->broadcast(id, message);
-        }
-
-        void receive() override
-        {
-            _server->receive();
-        }
-
-        void handleReceive(const boost::system::error_code &error, std::size_t byesTransferred) override
-        {
-            _server->handleReceive(error, byesTransferred);
-        }
-
-
     private:
         boost::asio::io_context _ioContext;
-        T *_server;
+        std::shared_ptr<T> _server;
     };
 
 }

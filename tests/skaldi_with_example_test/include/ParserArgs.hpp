@@ -55,10 +55,10 @@ private:
     int _ac;
     char **_av;
 
-    sk::Client<sk::client::TCP> *_cltTcp;
-    sk::Client<sk::client::UDP> *_cltUdp;
-    sk::Server<sk::server::UDP> *_srvUdp;
-    sk::Server<sk::server::TCP> *_srvTcp;
+//    sk::Client<sk::client::TCP> _cltTcp;
+    std::unique_ptr<sk::Client<sk::client::UDP>> _cltUdp;
+    std::unique_ptr<sk::Server<sk::server::UDP>> _srvUdp;
+//    sk::Server<sk::server::TCP> _srvTcp;
 };
 
 #endif //PARSER_ARGS_HPP
