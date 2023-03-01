@@ -15,17 +15,19 @@ namespace sk {
     template<typename T>
     class Client : public IClient {
     public:
+        Client()
+        {
+            _client = nullptr;
+        }
         /**
          * @brief Constructor of the client
          * @details Constructor of the client that will create a socket and a resolver to connect to the server depending on the type of the client
-         * @param type UDP or TCP
-         * @param ioService Asio io_service
          * @param host IP address of the server
          * @param port Port of the server
          */
         Client(const std::string &host, const std::string &port)
         {
-            _client = new T(_ioContext, host, port);
+            _client = std::make_shared<T>(_ioContext, host, port);
         };
 
         /**
@@ -35,7 +37,6 @@ namespace sk {
          */
         ~Client() override
         {
-            delete _client;
         };
 
         /**
@@ -73,24 +74,13 @@ namespace sk {
             _client->setDebugging(isDebugging);
         };
         /**
-         * @brief Enable or disable the first connection function
-         * @details Enable or disable the first function passed as parameter when the client is connected to the server for the first time
-         * @param isExecuted
-         * @return void
-         */
-        void setFirstConnection(bool isExecuted) override
-        {
-            _client->setFirstConnection(isExecuted);
-        };
-        /**
-         * @brief First connection into the server
-         * @details Do the function passed as parameter when the client is connected to the server for the first time
+         * @brief Connect into the server
+         * @details Connect into the server and send the data of identification
          * @param data
-         * @return void
          */
-        void firstConnection(const std::string &data)
+        void connect(const std::string &data)
         {
-            _client->firstConnection(data);
+            _client->connect(data);
         };
         /**
          * @brief Get buffer of the client
@@ -101,11 +91,6 @@ namespace sk {
         {
             return _client->getBuffer();
         };
-
-        boost::asio::io_context &getIoContext()
-        {
-            return _ioContext;
-        }
 
         void run()
         {
@@ -127,29 +112,12 @@ namespace sk {
             _ioContext.poll();
         }
 
-    protected:
-        /**
-         * @brief Handle sent messages
-         * @details Handle sent messages
-         * @param error
-         * @param message
-         * @return void
-         */
-        void handleSend(const boost::system::error_code &error, const std::string &message) override
+        Client &operator=(Client other)
         {
-            _client->handleSend(error, message);
-        };
-
-        /**
-         * @brief Handle received messages
-         * @details Handle received messages
-         * @param error
-         * @param bytesTransferred
-         */
-        void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) override
-        {
-            _client->handleReceive(error, bytesTransferred);
-        };
+            _ioContext = other._ioContext;
+            _client = other._client;
+            return *this;
+        }
 
     private:
         boost::asio::io_context _ioContext;
@@ -157,7 +125,7 @@ namespace sk {
          * @brief Instance of the client
          * @details Instance of the client that will be used to send and receive messages
          */
-        T *_client;
+        std::shared_ptr<T> _client;
     };
 }
 

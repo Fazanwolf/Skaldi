@@ -4,6 +4,7 @@
 #include "spdlog/spdlog.h"
 #include "core/client/IClient.hpp"
 #include <functional>
+#include <queue>
 
 namespace sk::client {
 
@@ -38,14 +39,14 @@ namespace sk::client {
          * @return void
          */
         void send(const std::string &message) override;
-        /**
-         * @brief Send a message to the server from a pointer of the client
-         * @details Send a message to the server
-         * @param clt
-         * @param message
-         * @return void
-         */
-        static void send(UDP *clt, const std::string &message);
+//        /**
+//         * @brief Send a message to the server from a pointer of the client
+//         * @details Send a message to the server
+//         * @param clt
+//         * @param message
+//         * @return void
+//         */
+//        static void send(UDP *clt, const std::string &message);
         /**
          * @brief Receive a message from the server
          * @details Receive a message from the server
@@ -60,18 +61,11 @@ namespace sk::client {
          */
         void setDebugging(bool isDebugging) override;
         /**
-         * @brief Enable or disable the first connection function
-         * @details Enable or disable the first function passed as parameter when the client is connected to the server for the first time
-         * @param isExecuted
-         * @return void
-         */
-        void setFirstConnection(bool isExecuted) override;
-        /**
-         * @brief First connection into the server
-         * @details Do the function passed as parameter when the client is connected to the server for the first time
+         * @brief Connect into the server
+         * @details Connect into the server and send the data of identification
          * @param data
          */
-        void firstConnection(const std::string &data);
+        void connect(const std::string &data);
         /**
          * @brief Get buffer of the client
          * @details Get buffer of the client
@@ -86,7 +80,7 @@ namespace sk::client {
          * @param message
          * @return void
          */
-        void handleSend(const boost::system::error_code &error, const std::string &message) override;
+        void handleSend(const boost::system::error_code &error, const std::string &message) const;
         /**
          * @brief Handle received messages
          * @details Handle received messages
@@ -94,7 +88,7 @@ namespace sk::client {
          * @param bytesTransferred
          * @return void
          */
-        void handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred) override;
+        void handleReceive(const boost::system::error_code &error);
     protected:
 
     private:
@@ -118,7 +112,7 @@ namespace sk::client {
          * @details A buffer to store the messages received
          */
         boost::array<char, 1024> _buffer {};
-        bool _isExecuted = false;
+        std::queue<std::string> _queueOfActions;
         bool _debugging = false;
     };
 }

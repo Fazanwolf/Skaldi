@@ -2,9 +2,9 @@
 
 namespace sk::client {
 
-    TCP::TCP(boost::asio::io_context &ioContext, const std::string &host, const std::string &port) : _socket(ioContext)
+    TCP::TCP(std::shared_ptr<boost::asio::io_context> ioContext, const std::string &host, const std::string &port) : _socket(*ioContext)
     {
-        boost::asio::ip::tcp::resolver resolver(ioContext);
+        boost::asio::ip::tcp::resolver resolver(*ioContext);
         auto endpoints = resolver.resolve({host, port});
 
         boost::asio::connect(_socket, endpoints);
@@ -31,10 +31,13 @@ namespace sk::client {
 
     void TCP::send(const std::string &message)
     {
+        (void) message;
     }
 
     void TCP::send(TCP *clt, const std::string &message)
     {
+        (void) clt;
+        (void) message;
     }
 
     void TCP::receive()
@@ -46,22 +49,20 @@ namespace sk::client {
         _isDebugging = isDebugging;
     };
 
-    void TCP::setFirstConnection(bool isExecuted)
-    {
-        _isExecuted = isExecuted;
-    };
-
     std::string TCP::getBuffer()
     {
         return std::string(_buffer.data());
     };
 
-    void TCP::handleReceive(const boost::system::error_code &error, std::size_t bytesTransferred)
+    void TCP::handleReceive(const boost::system::error_code &error)
     {
+        (void) error;
     }
 
     void TCP::handleSend(const boost::system::error_code &error, const std::string &message)
     {
+        (void) error;
+        (void) message;
     }
 
 }
