@@ -13,7 +13,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(SKALDI_BUILD_TESTS "Build tests" OFF)
 option(SKALDI_INSTALL "Install Skaldi" ON)
-option(SKALDI_CPACK "Create the installer" ON)
+option(SKALDI_CPACK "Create the installer" OFF)
 option(USE_CLANG_TIDY "Use clang-tidy" OFF)
 option(USE_CLANG_TIDY_WITH_ERRORS "Use clang tidy but all warnings are errors" OFF)
 option(USE_CLANG_TIDY_WITH_FIX "Use clang-tidy with fix" OFF)
