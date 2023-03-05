@@ -2,7 +2,6 @@
 #define SKALDI_SERVER_HPP
 
 #include "core/server/IServer.hpp"
-#include "core/server/IP/TCP.hpp"
 #include "core/server/IP/UDP.hpp"
 
 namespace sk {

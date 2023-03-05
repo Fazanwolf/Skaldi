@@ -7,7 +7,7 @@ namespace sk::server {
         _nbClient = 0;
         _broadcasting = false;
         spdlog::info("UDP Server started {} on port {} ", _remoteEndpoint.address().to_string(), port);
-        this->receive();
+        receive();
     }
 
     UDP::~UDP()
@@ -23,7 +23,7 @@ namespace sk::server {
                 std::getline(std::cin, message);
                 if (message == "exit")
                     std::exit(0);
-                this->sendToEveryone(message);
+                sendToEveryone(message);
             }
         });
         t.detach();
@@ -48,7 +48,7 @@ namespace sk::server {
 
     void UDP::setBroadcasting(bool able)
     {
-        this->_broadcasting = able;
+        _broadcasting = able;
     }
 
     void UDP::broadcast(const int &id, const std::string &message)
@@ -57,7 +57,7 @@ namespace sk::server {
             for (auto &[key, val]: _clients) {
                 if (val != id) {
                     boost::asio::ip::udp::endpoint endpoint = key;
-                    this->send(std::to_string(id) + " " + message, endpoint);
+                    send(std::to_string(id) + " " + message, endpoint);
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace sk::server {
     {
         for (auto &[key, val]: _clients) {
             boost::asio::ip::udp::endpoint endpoint = key;
-            this->send(message, endpoint);
+            send(message, endpoint);
         }
     }
 
@@ -79,14 +79,23 @@ namespace sk::server {
                 _clients[_remoteEndpoint] = _nbClient;
                 spdlog::info("First connection of {}",  _clients[_remoteEndpoint]);
                 send(std::to_string(_clients[_remoteEndpoint]), _remoteEndpoint);
+                broadcast(_clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+                if (!_clients.empty()) {
+                    for (auto &[key, val]: _clients) {
+                        if (val != _clients[_remoteEndpoint])
+                            send(std::to_string(val) + " ?", _remoteEndpoint);
+                    }
+                }
                 _nbClient++;
                 return receive();
             }
 
             // Print the message received and the name of the client
             if (!error || error == boost::asio::error::message_size) {
-                this->broadcast(_clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+                broadcast(_clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
                 spdlog::info("Data received from {}: {}", _clients[_remoteEndpoint], std::string(_buffer.data(), _buffer.data() + bytes_transferred));
+                if (std::string(_buffer.data(), _buffer.data() + bytes_transferred).find(".") != std::string::npos)
+                    _clients.erase(_remoteEndpoint);
                 return receive();
             }
         }
