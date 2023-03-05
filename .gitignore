@@ -33,3 +33,6 @@
 
 .idea
 .vscode
+build
+cmake-build-*
+docs/doc
