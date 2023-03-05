@@ -2,7 +2,6 @@
 #define SKALDI_CLIENT_HPP
 
 #include "core/client/IClient.hpp"
-#include "core/client/IP/TCP.hpp"
 #include "core/client/IP/UDP.hpp"
 
 namespace sk {
@@ -78,9 +77,19 @@ namespace sk {
          * @details Connect into the server and send the data of identification
          * @param data
          */
-        void connect(const std::string &data)
+        void connect(const std::string &data) override
         {
             _client->connect(data);
+        };
+        /**
+         * @brief Disconnect from the server
+         * @details Disconnect send the packet of disconnection to the server
+         * @return void
+         */
+        void disconnect() override
+        {
+            _client->disconnect();
+            _ioContext.stop();
         };
         /**
          * @brief Get buffer of the client
@@ -94,7 +103,10 @@ namespace sk {
 
         void run()
         {
-            _ioContext.run();
+            std::thread t([&]() {
+                _ioContext.run();
+            });
+            t.detach();
         }
 
         void runOne()

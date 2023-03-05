@@ -63,13 +63,9 @@ int ParserArgs::handleServer()
     utilities::Transform::toUpper(type);
     const unsigned short port = static_cast<unsigned short>(std::stoi(_av[3]));
 
-//    if (utilities::Check::strIsEqual("TCP", type)) {
-//        this->_srvTcp = sk::Server<sk::server::TCP>(port);
-//        this->_srvTcp.setBroadcasting(true);
-//        this->_srvTcp.getInput();
-//        this->_srvTcp.run();
-//        return (0);
-//    }
+    if (std::string("TCP") == type) {
+        // do something for tcp server
+    }
 
     if (std::string("UDP") == type) {
         this->_srvUdp = std::make_unique<sk::Server<sk::server::UDP>>(port);
@@ -94,28 +90,27 @@ int ParserArgs::handleClient()
     std::string type = std::string(_av[2]);
     utilities::Transform::toUpper(type);
 
-//    if (utilities::Check::strIsEqual("TCP", type)) {
-//        this->_cltTcp = sk::Client<sk::client::TCP>(_av[3], _av[4]);
-//        this->_cltTcp.getInput();
-//        this->_cltTcp.run();
-//        return (0);
-//    }
+    if (std::string("TCP") == type) {
+        // do something for tcp client
+    }
     if ("UDP" == type) {
         this->_cltUdp = std::make_unique<sk::Client<sk::client::UDP>>(_av[3], _av[4]);
         this->_cltUdp->setDebugging(false);
         this->_cltUdp->receive();
         this->_cltUdp->connect("?");
-
-        std::thread t([&]() {
-            this->_cltUdp->run();
-        });
-        t.detach();
+        this->_cltUdp->run();
+        this->_cltUdp->getInput();
 
         while (true) {
             std::string msg = this->_cltUdp->getBuffer();
-            if (!msg.empty()) std::cout << "Receive: " << msg << std::endl;
-            msg = "";
+            if (!msg.empty()) {
+                std::cout << "Receive from buffer: " << msg << std::endl;
+                if (msg == "all-exit") break;
+                msg = "";
+            }
         }
+        this->_cltUdp->disconnect();
+        return (0);
     }
     return this->invalidArgs();
 }
