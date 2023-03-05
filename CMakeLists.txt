@@ -19,6 +19,9 @@ option(USE_CLANG_TIDY_WITH_ERRORS "Use clang tidy but all warnings are errors" O
 option(USE_CLANG_TIDY_WITH_FIX "Use clang-tidy with fix" OFF)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF) # Fix dll issues on Windows
 
+if(WIN32)
+    set(${PROJECT_NAME}_ICON ${CMAKE_CURRENT_SOURCE_DIR}/cmake/assets/app.rc)
+endif()
 
 add_library(${PROJECT_NAME}
         src/core/client/IP/UDP.cpp  src/core/server/IP/UDP.cpp
