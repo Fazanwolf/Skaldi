@@ -35,4 +35,5 @@
 .vscode
 build
 cmake-build-*
-docs/doc
+
+doc

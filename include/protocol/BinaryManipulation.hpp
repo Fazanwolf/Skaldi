@@ -9,6 +9,10 @@ namespace sk::proto {
 
     class BinaryManipulation {
     public:
+        /**
+         * @brief Construct a new Binary Manipulation object
+         * @details This class is used to manipulate binary data
+         */
         BinaryManipulation() = default;
         ~BinaryManipulation() = default;
 
