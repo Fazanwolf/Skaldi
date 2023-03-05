@@ -21,8 +21,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF) # Fix dll issues on Windo
 
 
 add_library(${PROJECT_NAME}
-        src/core/client/IP/TCP.cpp src/core/client/IP/UDP.cpp
-        src/core/server/IP/TCP.cpp src/core/server/IP/UDP.cpp
+        src/core/client/IP/UDP.cpp  src/core/server/IP/UDP.cpp
         src/protocol/BinaryManipulation.cpp
 )
 
