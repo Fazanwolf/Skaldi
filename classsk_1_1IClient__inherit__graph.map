@@ -1,0 +1,5 @@
+<map id="sk::IClient" name="sk::IClient">
+<area shape="rect" id="node1" title="Interface for a client." alt="" coords="84,5,163,31"/>
+<area shape="rect" id="node2" href="$classsk_1_1Client.html" title="Class Client." alt="" coords="5,79,111,104"/>
+<area shape="rect" id="node3" href="$classsk_1_1client_1_1UDP.html" title="Class UDP client." alt="" coords="135,79,242,104"/>
+</map>
