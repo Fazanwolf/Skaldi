@@ -13,14 +13,14 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(SKALDI_BUILD_TESTS "Build tests" OFF)
 option(SKALDI_INSTALL "Install Skaldi" ON)
-option(SKALDI_CPACK "Create the installer" OFF)
+option(SKALDI_CPACK "Create the installer" ON)
 option(USE_CLANG_TIDY "Use clang-tidy" OFF)
 option(USE_CLANG_TIDY_WITH_ERRORS "Use clang tidy but all warnings are errors" OFF)
 option(USE_CLANG_TIDY_WITH_FIX "Use clang-tidy with fix" OFF)
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF) # Fix dll issues on Windows
 
 if(WIN32)
-    set(${PROJECT_NAME}_ICON ${CMAKE_CURRENT_SOURCE_DIR}/cmake/assets/app.rc)
+    set(${PROJECT_NAME}_ICON cmake/assets/app.rc)
 endif()
 
 add_library(${PROJECT_NAME}

@@ -17,16 +17,16 @@ if (${${PROJECT_NAME}_IS_EXECUTABLE})
     set(CPACK_NSIS_MUI_FINISHPAGE_RUN_NOTCHECKED ON) # Launch checkbox
     set(CPACK_NSIS_MUI_FINISHPAGE_RUN_PARAMETERS "") # Launch parameters
 endif ()
-#set(CPACK_NSIS_MENU_LINKS
-#        "https://your_link/${PROJECT_NAME}" "${PROJECT_NAME} Documentation" # Add a link to the documentation in the Start Menu
-#        )
+set(CPACK_NSIS_MENU_LINKS
+        "https://fazanwolf.github.io/${PROJECT_NAME}" "${PROJECT_NAME} Documentation" # Add a link to the documentation in the Start Menu
+)
 set(CPACK_NSIS_UNINSTALL_NAME "${CPACK_PACKAGE_NAME}-Uninstaller") # Name of the uninstaller
 set(CPACK_NSIS_WELCOME_TITLE "Welcome to ${CPACK_PACKAGE_NAME} ${PROJECT_VERSION}") # Title of the welcome page
 set(CPACK_NSIS_FINISH_TITLE "Thank you for installing ${CPACK_PACKAGE_NAME} ${PROJECT_VERSION}") # Title of the finish page
 
-set(CPACK_NSIS_MUI_HEADERIMAGE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/assets\\\\nsis-skaldi-header.bmp") # Header image
+set(CPACK_NSIS_MUI_HEADERIMAGE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/assets\\\\nsis-skaldi-header.bmp2") # Header image
 set(CPACK_NSIS_MUI_HEADERIMAGE_NOSTRETCH ON) # Don't stretch the header image
-set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_CURRENT_SOURCE_DIR}/assets\\\\nsis-skaldi-wizard.bmp") # Left image
+set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP "${CMAKE_CURRENT_SOURCE_DIR}/cmake/assets\\\\nsis-skaldi-wizard.bmp2") # Left image
 set(CPACK_NSIS_MUI_WELCOMEFINISHPAGE_BITMAP_NOSTRETCH ON) # Don't stretch the left image
 set(CPACK_NSIS_BRANDING_TEXT "${CPACK_PACKAGE_NAME} ${PROJECT_VERSION}") # Text at the bottom of the install window
 set(CPACK_NSIS_IGNORE_LICENSE_PAGE OFF) # Disable the license page
