@@ -64,8 +64,16 @@ namespace sk::client {
          * @brief Connect into the server
          * @details Connect into the server and send the data of identification
          * @param data
+         * @return void
          */
-        void connect(const std::string &data);
+        void connect(const std::string &data) override;
+        /**
+         * @brief Disconnect into the server
+         * @details Disconnect send the packet of disconnection
+         * @param data
+         * @return void
+         */
+        void disconnect() override;
         /**
          * @brief Get buffer of the client
          * @details Get buffer of the client

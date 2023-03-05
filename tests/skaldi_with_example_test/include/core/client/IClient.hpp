@@ -52,6 +52,17 @@ namespace sk {
              * @return Buffer of the client
              */
             virtual std::string getBuffer() = 0;
+            /**
+             * @brief Connect the packet to connect to the server
+             * @param data
+             * @return void
+             */
+            virtual void connect(const std::string &data) = 0;
+            /**
+             * @brief Disconnect the packet to connect from the server
+             * @return void
+             */
+            virtual void disconnect() = 0;
 
         protected:
     };
