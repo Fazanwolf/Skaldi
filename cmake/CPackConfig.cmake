@@ -6,9 +6,15 @@ set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_CONTACT "Fazanwolf")
 set(CPACK_PACKAGE_VENDOR "Fazanwolf")
 set(CPACK_PACKAGE_DESCRIPTION "Skaldi is a C++ library to handle network easily, using TCP & UDP packets. It is cross-platform and can be used on Windows and Linux.")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Skaldi is a library to handle networking")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Skaldi is a library to handle networking.")
 set(CPACK_PACKAGE_HOMEPAGE_URL "${PROJECT_HOMEPAGE_URL}")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${PROJECT_VERSION}-${CMAKE_SYSTEM_NAME}") # Default
+
+get_target_property(TARGET_TYPE ${PROJECT_NAME} TYPE)
+if (TARGET_TYPE STREQUAL STATIC_LIBRARY)
+    set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${PROJECT_VERSION}-static-${CMAKE_SYSTEM_NAME}") # Static
+elseif (TARGET_TYPE STREQUAL SHARED_LIBRARY)
+    set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${PROJECT_VERSION}-shared-${CMAKE_SYSTEM_NAME}") # Shared
+endif ()
 
 # Set the version information
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
@@ -18,19 +24,65 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
 # Set some resource files
 set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CPACK_PACKAGE_NAME}") # Installation directory on the target system
-#set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/assets/logo.ico") # Location of an icon to display during the installation process
+set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/cmake/assets/logo.ico") # Location of an icon to display during the installation process
 set(CPACK_PACKAGE_CHECKSUM "SHA256") # Create a checksum for the package
 set(CPACK_MONOLITHIC_INSTALL OFF) # Install all components in one package, can be useful to force the installation of all components
-get_target_property(TARGET_TYPE ${PROJECT_NAME} TYPE)
+
 if (TARGET_TYPE STREQUAL "EXECUTABLE")
     set(CPACK_PACKAGE_EXECUTABLES "${PROJECT_NAME}" "${PROJECT_NAME}") # Set the executable name
     set(${PROJECT_NAME}_IS_EXECUTABLE ON)
-#    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/assets/logo.ico" DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT runtime) # Install the logo.ico file
 endif ()
+
+# Components
+include(CPackComponent)
+cpack_add_install_type(Full DISPLAY_NAME "Everything")
+cpack_add_install_type(Developer DISPLAY_NAME "Development")
+cpack_add_install_type(Software DISPLAY_NAME "Software")
+
+cpack_add_component(headers
+        DISPLAY_NAME "Headers"
+        DESCRIPTION "C++ Header files"
+        GROUP "Development"
+        INSTALL_TYPES Developer Full
+        )
+cpack_add_component(archive
+        DISPLAY_NAME "Archive"
+        DESCRIPTION "Static library"
+        GROUP "Development"
+        DEPENDS headers
+        INSTALL_TYPES Developer Full
+        )
+cpack_add_component(cmake
+        DISPLAY_NAME "CMake"
+        DESCRIPTION "CMake files"
+        GROUP "Development"
+        DEPENDS headers archive
+        INSTALL_TYPES Developer Full
+        )
+cpack_add_component(library
+        DISPLAY_NAME "Library"
+        DESCRIPTION "Shared library"
+        GROUP "Software"
+        INSTALL_TYPES Developer Full Software
+        )
+cpack_add_component(runtime
+        DISPLAY_NAME "Runtime"
+        DESCRIPTION "Runtime files"
+        GROUP "Software"
+        INSTALL_TYPES Full Software
+        )
+cpack_add_component_group(Development
+        EXPANDED
+        DESCRIPTION "All of the tools you'll ever need to develop software"
+        )
+cpack_add_component_group(Software
+        EXPANDED
+        DESCRIPTION  "All of the tools you'll ever need to run software"
+        )
 
 # Source package generator
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${PROJECT_VERSION}-src")
