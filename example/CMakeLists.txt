@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(EXAMPLE_BUILD_TESTS "Build tests" OFF)
-option(EXAMPLE_INSTALL "Install Skaldi" ON)
+option(EXAMPLE_INSTALL "Install example with Skaldi" ON)
 option(EXAMPLE_CPACK "Create the installer" OFF)
 option(USE_CLANG_TIDY "Use clang-tidy" OFF)
 option(USE_CLANG_TIDY_WITH_ERRORS "Use clang tidy but all warnings are errors" OFF)
